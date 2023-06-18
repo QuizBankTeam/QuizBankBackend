@@ -1,0 +1,3 @@
+./QuizBankBackend.egg-info/*
+*.json
+./build/*
