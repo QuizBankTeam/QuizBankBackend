@@ -1,5 +1,7 @@
 # QuizBankBackend
-Python = 3.9.13<br>
+**Environment**<br>
+Platform: Ubuntu 22.04 LTS<br>
+Python version: 3.9.13<br>
 
 **Build**<br>
 For conda virtual environment (recommanded)
