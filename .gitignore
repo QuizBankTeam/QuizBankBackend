@@ -1,4 +1,7 @@
-QuizBankBackend.egg-info/
-*.json
 __pycache__/
+QuizBankBackend.egg-info/
 build/
+instance/
+
+*.json
+*.pyc
