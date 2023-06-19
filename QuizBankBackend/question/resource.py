@@ -18,7 +18,8 @@ class QuestionResource(Resource):
                 response = setResponse(404, 'Question not found.')
                 return response
             else:
-                response = setResponse(200, 'Get question successfully.', 'question', question)
+                response = setResponse(
+                    200, 'Get question successfully.', 'question', question)
                 return response
 
         response = setResponse(400, 'Failed to get question.')

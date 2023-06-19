@@ -25,14 +25,15 @@ class QuestionBankResource(Resource):
                 return response
 
             response = setResponse(
-                        200,
-                        'Get quesitons from question bank successfully.',
-                        'questionBank',
-                        questionBank
-                    )
+                200,
+                'Get quesitons from question bank successfully.',
+                'questionBank',
+                questionBank
+            )
             return response
 
-        response = setResponse(400, 'Failed to get questions from question bank.')
+        response = setResponse(
+            400, 'Failed to get questions from question bank.')
         return response
 
     def post(self):
@@ -59,7 +60,8 @@ class QuestionBankResource(Resource):
             # print(questionBank)
             db.questionBank.update_one(filter, {'$set': questionBank})
 
-            response = setResponse(200, 'Update question bank info successfully.')
+            response = setResponse(
+                200, 'Update question bank info successfully.')
             return response
 
         response = setResponse(400, 'Failed to update question bank info.')

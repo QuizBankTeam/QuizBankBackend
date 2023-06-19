@@ -13,12 +13,13 @@ class QuestionSetResource(Resource):
 
         if form.validate():
             questionSet = db.questionSets.find_one(formJson['questionSetId'])
-            
+
             if questionSet is None:
                 response = setResponse(404, 'Question set not found.')
                 return response
             else:
-                response = setResponse(200, 'Get question set successfully.', 'questionSet', questionSet)
+                response = setResponse(
+                    200, 'Get question set successfully.', 'questionSet', questionSet)
                 return response
 
         response = setResponse(400, 'Failed to get question set.')
@@ -66,4 +67,3 @@ class QuestionSetResource(Resource):
 
         response = setResponse(400, 'Failed to delete questoin set.')
         return response
-
