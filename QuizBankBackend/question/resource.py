@@ -4,6 +4,7 @@ from QuizBankBackend.question.form import *
 from QuizBankBackend.utility import setResponse
 from flask import request
 from flask_restful import Resource
+from flask_jwt_extended import jwt_required
 
 
 class QuestionResource(Resource):
@@ -18,12 +19,14 @@ class QuestionResource(Resource):
                 response = setResponse(404, 'Question not found.')
                 return response
             else:
-                response = setResponse(200, 'Get question successfully.', 'question', question)
+                response = setResponse(
+                    200, 'Get question successfully.', 'question', question)
                 return response
 
         response = setResponse(400, 'Failed to get question.')
         return response
 
+    @jwt_required()
     def post(self):
         formJson = request.get_json()
         form = PostQuestionForm.from_json(formJson)
@@ -38,6 +41,7 @@ class QuestionResource(Resource):
         response = setResponse(400, 'Failed to add question.')
         return response
 
+    @jwt_required()
     def put(self):
         formJson = request.get_json()
         form = PutQuestionForm.from_json(formJson)
@@ -52,6 +56,7 @@ class QuestionResource(Resource):
         response = setResponse(400, 'Failed to update question.')
         return response
 
+    @jwt_required()
     def delete(self):
         formJson = request.get_json()
         form = DeleteQuestionForm.from_json(formJson)

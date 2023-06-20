@@ -4,6 +4,7 @@ from QuizBankBackend.questionSet.form import *
 from QuizBankBackend.utility import setResponse
 from flask import request
 from flask_restful import Resource
+from flask_jwt_extended import jwt_required
 
 
 class QuestionSetResource(Resource):
@@ -13,17 +14,19 @@ class QuestionSetResource(Resource):
 
         if form.validate():
             questionSet = db.questionSets.find_one(formJson['questionSetId'])
-            
+
             if questionSet is None:
                 response = setResponse(404, 'Question set not found.')
                 return response
             else:
-                response = setResponse(200, 'Get question set successfully.', 'questionSet', questionSet)
+                response = setResponse(
+                    200, 'Get question set successfully.', 'questionSet', questionSet)
                 return response
 
         response = setResponse(400, 'Failed to get question set.')
         return response
 
+    @jwt_required()
     def post(self):
         formJson = request.get_json()
         form = PostQuestionSetForm.from_json(formJson)
@@ -40,6 +43,7 @@ class QuestionSetResource(Resource):
         response = setResponse(400, 'Failed to add question set.')
         return response
 
+    @jwt_required()
     def put(self):
         formJson = request.get_json()
         form = PutQuestionSetForm.from_json(formJson)
@@ -55,6 +59,7 @@ class QuestionSetResource(Resource):
         response = setResponse(400, 'Failed to update question set.')
         return response
 
+    @jwt_required()
     def delete(self):
         formJson = request.get_json()
         form = DeleteQuestionSetForm.from_json(formJson)
@@ -66,4 +71,3 @@ class QuestionSetResource(Resource):
 
         response = setResponse(400, 'Failed to delete questoin set.')
         return response
-

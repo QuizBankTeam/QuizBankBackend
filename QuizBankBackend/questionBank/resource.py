@@ -4,6 +4,7 @@ from QuizBankBackend.questionBank.form import *
 from QuizBankBackend.utility import setResponse
 from flask import request
 from flask_restful import Resource
+from flask_jwt_extended import jwt_required
 
 
 class QuestionBankResource(Resource):
@@ -25,16 +26,18 @@ class QuestionBankResource(Resource):
                 return response
 
             response = setResponse(
-                        200,
-                        'Get quesitons from question bank successfully.',
-                        'questionBank',
-                        questionBank
-                    )
+                200,
+                'Get quesitons from question bank successfully.',
+                'questionBank',
+                questionBank
+            )
             return response
 
-        response = setResponse(400, 'Failed to get questions from question bank.')
+        response = setResponse(
+            400, 'Failed to get questions from question bank.')
         return response
 
+    @jwt_required()
     def post(self):
         formJson = request.get_json()
         form = PostQuestionBankForm.from_json(formJson)
@@ -48,6 +51,7 @@ class QuestionBankResource(Resource):
         response = setResponse(400, 'Failed to create a question bank.')
         return response
 
+    @jwt_required()
     def put(self):
         formJson = request.get_json()
         form = PutQuestionBankForm.from_json(formJson)
@@ -59,12 +63,14 @@ class QuestionBankResource(Resource):
             # print(questionBank)
             db.questionBank.update_one(filter, {'$set': questionBank})
 
-            response = setResponse(200, 'Update question bank info successfully.')
+            response = setResponse(
+                200, 'Update question bank info successfully.')
             return response
 
         response = setResponse(400, 'Failed to update question bank info.')
         return response
 
+    @jwt_required()
     def delete(self):
         formJson = request.get_json()
         form = DeleteQuestionBankForm.from_json(formJson)

@@ -6,7 +6,8 @@ requirements = [
     'pymongo',
     'WTForms',
     'WTForms-JSON',
-    'flask-restful'
+    'flask-restful',
+    'flask-jwt-extended'
 ]
 
 setup(
