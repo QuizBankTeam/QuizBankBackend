@@ -4,7 +4,9 @@ from QuizBankBackend.user.form import *
 from QuizBankBackend.utility import setResponse
 from flask import request
 from flask_restful import Resource
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, create_refresh_token
+from flask_jwt_extended import unset_access_cookies, set_access_cookies, set_refresh_cookies
+from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_request
 
 
 class UserProfileResource(Resource):
@@ -12,7 +14,6 @@ class UserProfileResource(Resource):
         formJson = request.get_json()
         form = GetUserForm.from_json(formJson)
 
-        print(form.errors)
         if form.validate():
             user = db.users.find_one({'_id': formJson['userId']})
 
@@ -74,11 +75,11 @@ class LoginResource(Resource):
             elif user['password'] != formJson['password']:
                 response = setResponse(401, 'Wrong password.')
                 return response
-            else:
-                del user['password']
 
+            del user['password']
             response = setResponse(200, 'Login successfully.', 'user', user)
-            response.set_cookie("access_token", create_access_token(identity=user['_id']))
+            set_access_cookies(response, create_access_token(identity=user['_id']))
+            set_refresh_cookies(response, create_refresh_token(identity=user['_id']))
             return response
 
         response = setResponse(400, 'Failed to login.')
@@ -87,5 +88,14 @@ class LoginResource(Resource):
 class LogoutResource(Resource):
     def post(self):
         response = setResponse(200, 'Logout successfully.')
-        response.set_cookie("access_token", '', expires=0)
+        unset_access_cookies(response)
+        return response
+
+
+class RefreshTokenResource(Resource):
+    @jwt_required(refresh=True)
+    def post(self):
+        identity = get_jwt_identity()
+        response = setResponse(200, 'Refresh token successfully.')
+        set_access_cookies(response, create_access_token(identity=identity))
         return response
