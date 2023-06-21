@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, FieldList, SelectField
+from wtforms import StringField, FieldList, SelectField, DateField
 from wtforms.validators import DataRequired, UUID
 from QuizBankBackend.questionBank.form import QUESTION_BANK_TYPE
 
@@ -72,6 +72,10 @@ class PostQuestionForm(FlaskForm):
             DataRequired(),
             UUID()
         ]
+    )
+    createdDate = DateField(
+        label='createdDate',
+        validators=[DataRequired()]
     )
     image = FieldList(StringField(
         validators=[DataRequired()]
