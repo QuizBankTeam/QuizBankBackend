@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, FieldList, FormField
+from wtforms import StringField, FieldList, FormField, DateField
 from wtforms.validators import DataRequired, UUID
 from QuizBankBackend.question.form import PostQuestionForm
 
@@ -27,24 +27,33 @@ class PostQuestionSetForm(FlaskForm):
     ))
     questionBank = StringField(
         label='questionBank',
-        validators=[DataRequired()]
+        validators=[
+            DataRequired(),
+            UUID()
+        ]
     )
     questions = FieldList(FormField(PostQuestionForm))
     provider = StringField(
         label='provider',
-        validators=[DataRequired()]
+        validators=[
+            DataRequired(),
+            UUID()
+        ]
     )
-    createdDate = StringField(
+    createdDate = DateField(
         label='createdDate',
         validators=[DataRequired()]
     )
-    orginateFrom = StringField(
-        label='orginateFrom',
-        validators=[DataRequired()]
+    originateFrom = StringField(
+        label='originateFrom',
+        validators=[
+            DataRequired(),
+            UUID()
+        ]
     )
 
 
-class PutQuestionSetForm(PostQuestionForm):
+class PutQuestionSetForm(PostQuestionSetForm):
     questionSetId = StringField(
         label='questionSetId',
         validators=[

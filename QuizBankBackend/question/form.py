@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, FieldList, SelectField
 from wtforms.validators import DataRequired, UUID
+from QuizBankBackend.questionBank.form import QUESTION_BANK_TYPE
 
 
 class GetQuestionForm(FlaskForm):
@@ -40,9 +41,16 @@ class PostQuestionForm(FlaskForm):
         label='questionType',
         choices=QUESTION_TYPE
     )
+    bankType = SelectField(
+        label='bankType',
+        choices=QUESTION_BANK_TYPE
+    )
     questionBank = StringField(
         label='questionBank',
-        validators=[DataRequired()]
+        validators=[
+            DataRequired(),
+            UUID()
+        ]
     )
     answerOptions = FieldList(StringField(
         validators=[DataRequired()]
@@ -53,11 +61,17 @@ class PostQuestionForm(FlaskForm):
     )
     provider = StringField(
         label='provider',
-        validators=[DataRequired()]
+        validators=[
+            DataRequired(),
+            UUID()
+        ]
     )
-    orginateFrom = StringField(
-        label='orginateFrom',
-        validators=[DataRequired()]
+    originateFrom = StringField(
+        label='originateFrom',
+        validators=[
+            DataRequired(),
+            UUID()
+        ]
     )
     image = FieldList(StringField(
         validators=[DataRequired()]

@@ -34,14 +34,24 @@ class PostQuestionBankForm(FlaskForm):
     )
     members = FieldList(
         StringField(validators=[
-                    DataRequired(),
-                    # UUID()
-                    ]),
+            DataRequired(),
+            UUID()
+        ]),
         min_entries=1
+    )
+    originateFrom = StringField(
+        label='originateFrom',
+        validators=[
+            DataRequired(),
+            UUID()
+        ]
     )
     creator = StringField(
         label='creator',
-        validators=[DataRequired()]
+        validators=[
+            DataRequired(),
+            UUID()
+        ]
     )
 
 
