@@ -27,7 +27,7 @@ wtforms_json.init()
 class CSRFToken(Resource):
     def get(self):
         response = setResponse(200, 'Hello world!')
-        response.set_cookie('CSRF-TOKEN', generate_csrf(), httponly=True)
+        response.set_cookie('CSRF-TOKEN', generate_csrf(), httponly=True, secure=True)
         return response
 
 
