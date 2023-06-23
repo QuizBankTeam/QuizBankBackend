@@ -11,7 +11,7 @@ from QuizBankBackend.utility import setResponse
 app = Flask(__name__, instance_relative_config=True)
 
 app.config['SECRET_KEY'] = os.urandom(24)
-app.config['SESSION_COOKIE_SECURE'] = True
+# app.config['SESSION_COOKIE_SECURE'] = True
 app.config['JWT_SECRET_KEY'] = os.urandom(24)
 app.config['JWT_COOKIE_SECURE'] = True
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
@@ -27,7 +27,7 @@ wtforms_json.init()
 class CSRFToken(Resource):
     def get(self):
         response = setResponse(200, 'Hello world!')
-        response.set_cookie('CSRF-TOKEN', generate_csrf(), httponly=True, secure=True)
+        response.set_cookie('CSRF-TOKEN', generate_csrf(), httponly=True)
         return response
 
 
