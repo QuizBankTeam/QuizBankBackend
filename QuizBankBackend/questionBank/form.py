@@ -3,6 +3,19 @@ from wtforms import StringField, FieldList, DateField, SelectField
 from wtforms.validators import DataRequired, UUID
 
 
+QUESTION_BANK_TYPE = ['multi', 'single', 'public']
+
+
+class GetAllQuestionBanksForm(FlaskForm):
+    class Meta:
+        csrf = False
+
+    bankType = SelectField(
+        label='bankType',
+        choices=QUESTION_BANK_TYPE
+    )
+
+
 class GetQuestionBankForm(FlaskForm):
     class Meta:
         csrf = False
@@ -14,9 +27,6 @@ class GetQuestionBankForm(FlaskForm):
             UUID()
         ]
     )
-
-
-QUESTION_BANK_TYPE = ['multi', 'single', 'public']
 
 
 class PostQuestionBankForm(FlaskForm):

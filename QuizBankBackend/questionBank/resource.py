@@ -4,8 +4,32 @@ from QuizBankBackend.questionBank.form import *
 from QuizBankBackend.utility import setResponse
 from flask import request
 from flask_restful import Resource
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
+
+class AllQuestionBankResource(Resource):
+    @jwt_required()
+    def get(self):
+        formJson = request.get_json()
+        form = GetAllQuestionBanksForm.from_json(formJson)
+        
+        if form.validate():
+            userId = get_jwt_identity()
+            banks = db.questionBanks.find({'creator': userId})
+            if banks is None:
+                response = setResponse(404, 'Question banks not found.')
+                return response
+
+            response = setResponse(
+                200,
+                'Get all question banks successfully.',
+                'questionBanks',
+                list(banks)
+            )
+            return response
+
+        response = setResponse(400, 'Failed to get all question banks.')
+        return response
 
 class QuestionBankResource(Resource):
     def get(self):
@@ -44,6 +68,7 @@ class QuestionBankResource(Resource):
 
         if form.validate():
             formJson['_id'] = str(uuid.uuid4())
+            formJson['creator'] = get_jwt_identity()
             db.questionBanks.insert_one(formJson)
             response = setResponse(201, 'Create a question bank successfully.')
             return response
