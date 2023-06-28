@@ -3,6 +3,16 @@
 Platform: Ubuntu 22.04 LTS<br>
 Python version: 3.9.13<br>
 
+**Configuration**<br>
+You need to add those settings in `QuizBankBackend/setting.json`
+```json
+{
+    "MongodbUri": "YOUR_MONGODB_URI",
+    "OCRCredentialPath": "YOUR_OCR_CREDENTIAL_PATH",
+    "ImgurClientId": "YOUR_CLIENT_ID"
+}
+```
+
 **Build**<br>
 For conda virtual environment (recommanded)
 ```
