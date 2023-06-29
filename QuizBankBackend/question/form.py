@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, FieldList, SelectField, DateField
-from wtforms.validators import DataRequired, UUID
+from wtforms.validators import DataRequired, UUID, Optional
 from QuizBankBackend.questionBank.form import QUESTION_BANK_TYPE
 
 
@@ -91,3 +91,47 @@ class PutQuestionForm(PostQuestionForm):
 class DeleteQuestionForm(GetQuestionForm):
     class Meta:
         csrf = True
+
+
+class PatchAnswerForm(FlaskForm):
+    questionId = StringField(
+        label='questionId',
+        validators=[
+            DataRequired(),
+            UUID()
+        ]
+    )
+    questionSetId = StringField(
+        label='questionSetId',
+        validators=[
+            Optional(),
+            UUID()
+        ]
+    )
+    answerOptions = FieldList(StringField(
+        validators=[DataRequired()]
+    ))
+    answerDescription = StringField(
+        label='answerDescription',
+        validators=[DataRequired()]
+    )
+
+
+class PatchTagForm(FlaskForm):
+    questionId = StringField(
+        label='questionId',
+        validators=[
+            DataRequired(),
+            UUID()
+        ]
+    )
+    questionSetId = StringField(
+        label='questionSetId',
+        validators=[
+            Optional(),
+            UUID()
+        ]
+    )
+    tag = FieldList(StringField(
+        validators=[DataRequired()]
+    ))
