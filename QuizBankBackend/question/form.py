@@ -59,13 +59,6 @@ class PostQuestionForm(FlaskForm):
         label='answerDescription',
         validators=[DataRequired()]
     )
-    provider = StringField(
-        label='provider',
-        validators=[
-            DataRequired(),
-            UUID()
-        ]
-    )
     originateFrom = StringField(
         label='originateFrom',
         validators=[

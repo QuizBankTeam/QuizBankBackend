@@ -56,13 +56,6 @@ class PostQuestionBankForm(FlaskForm):
             UUID()
         ]
     )
-    creator = StringField(
-        label='creator',
-        validators=[
-            DataRequired(),
-            UUID()
-        ]
-    )
 
 
 class PutQuestionBankForm(PostQuestionBankForm):

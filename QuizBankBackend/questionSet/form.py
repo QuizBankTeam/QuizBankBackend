@@ -33,13 +33,6 @@ class PostQuestionSetForm(FlaskForm):
         ]
     )
     questions = FieldList(FormField(PostQuestionForm))
-    provider = StringField(
-        label='provider',
-        validators=[
-            DataRequired(),
-            UUID()
-        ]
-    )
     createdDate = DateField(
         label='createdDate',
         validators=[DataRequired()]

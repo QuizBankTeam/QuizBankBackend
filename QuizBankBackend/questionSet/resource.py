@@ -4,7 +4,7 @@ from QuizBankBackend.questionSet.form import *
 from QuizBankBackend.utility import setResponse
 from flask import request
 from flask_restful import Resource
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
 class QuestionSetResource(Resource):
@@ -34,8 +34,10 @@ class QuestionSetResource(Resource):
         if form.validate():
             questionSetId = str(uuid.uuid4())
             formJson['_id'] = questionSetId
+            formJson['provider'] = get_jwt_identity()
             for question in formJson['questions']:
                 question['_id'] = str(uuid.uuid4())
+                question['provider'] = get_jwt_identity()
             db.questionSets.insert_one(formJson)
             response = setResponse(201, 'Add question set successfully!')
             return response

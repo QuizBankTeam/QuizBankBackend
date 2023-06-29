@@ -2,7 +2,7 @@ import base64
 from QuizBankBackend.scanner.form import *
 from QuizBankBackend.db import db
 from QuizBankBackend.utility import setResponse
-from QuizBankBackend.scanner.imgurAPI import *
+from QuizBankBackend.scanner.api import *
 from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity

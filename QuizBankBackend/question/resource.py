@@ -4,7 +4,7 @@ from QuizBankBackend.question.form import *
 from QuizBankBackend.utility import setResponse
 from flask import request
 from flask_restful import Resource
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
 class QuestionResource(Resource):
@@ -34,6 +34,7 @@ class QuestionResource(Resource):
         if form.validate():
             questionId = str(uuid.uuid4())
             formJson['_id'] = questionId
+            formJson['provider'] = get_jwt_identity()
             db.questions.insert_one(formJson)
             response = setResponse(201, 'Add question successfully!')
             return response

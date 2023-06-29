@@ -12,7 +12,7 @@ class AllQuestionBankResource(Resource):
     def get(self):
         formJson = request.get_json()
         form = GetAllQuestionBanksForm.from_json(formJson)
-        
+
         if form.validate():
             userId = get_jwt_identity()
             banks = db.questionBanks.find({'creator': userId})
@@ -85,9 +85,7 @@ class QuestionBankResource(Resource):
             filter = {'_id': formJson['questionBankId']}
             questionBank = formJson.copy()
             del questionBank['questionBankId']
-            # print(questionBank)
-            db.questionBank.update_one(filter, {'$set': questionBank})
-
+            db.questionBanks.update_one(filter, {'$set': questionBank})
             response = setResponse(
                 200, 'Update question bank info successfully.')
             return response
