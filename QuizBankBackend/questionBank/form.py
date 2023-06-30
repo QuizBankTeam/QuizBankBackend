@@ -3,6 +3,19 @@ from wtforms import StringField, FieldList, DateField, SelectField
 from wtforms.validators import DataRequired, UUID
 
 
+QUESTION_BANK_TYPE = ['multi', 'single', 'public']
+
+
+class GetAllQuestionBanksForm(FlaskForm):
+    class Meta:
+        csrf = False
+
+    bankType = SelectField(
+        label='bankType',
+        choices=QUESTION_BANK_TYPE
+    )
+
+
 class GetQuestionBankForm(FlaskForm):
     class Meta:
         csrf = False
@@ -14,9 +27,6 @@ class GetQuestionBankForm(FlaskForm):
             UUID()
         ]
     )
-
-
-QUESTION_BANK_TYPE = ['multi', 'single', 'public']
 
 
 class PostQuestionBankForm(FlaskForm):
@@ -34,14 +44,17 @@ class PostQuestionBankForm(FlaskForm):
     )
     members = FieldList(
         StringField(validators=[
-                    DataRequired(),
-                    # UUID()
-                    ]),
+            DataRequired(),
+            UUID()
+        ]),
         min_entries=1
     )
-    creator = StringField(
-        label='creator',
-        validators=[DataRequired()]
+    originateFrom = StringField(
+        label='originateFrom',
+        validators=[
+            DataRequired(),
+            UUID()
+        ]
     )
 
 

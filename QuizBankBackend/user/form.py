@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, EmailField, PasswordField
-from wtforms.validators import DataRequired, UUID
+from wtforms import StringField, EmailField, PasswordField, DateField
+from wtforms.validators import DataRequired, UUID, Email
 
 
 class GetUserForm(FlaskForm):
@@ -23,10 +23,17 @@ class RegisterForm(FlaskForm):
     )
     email = EmailField(
         label='email',
-        validators=[DataRequired()]
+        validators=[
+            DataRequired(),
+            Email()
+        ]
     )
     password = PasswordField(
         label='password',
+        validators=[DataRequired()]
+    )
+    createdDate = DateField(
+        label='createdDate',
         validators=[DataRequired()]
     )
 

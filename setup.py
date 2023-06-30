@@ -7,7 +7,9 @@ requirements = [
     'WTForms',
     'WTForms-JSON',
     'flask-restful',
-    'flask-jwt-extended'
+    'flask-jwt-extended',
+    'email_validator',
+    'google-cloud-vision'
 ]
 
 setup(

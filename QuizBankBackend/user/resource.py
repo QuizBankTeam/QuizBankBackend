@@ -60,6 +60,9 @@ class RegisterResource(Resource):
 
             response = setResponse(status, msg)
             return response
+        
+        response = setResponse(400, 'Failed to register.')
+        return response
 
 class LoginResource(Resource):
     def post(self):
