@@ -13,6 +13,11 @@ from google.cloud import vision
 
 app = Flask(__name__, instance_relative_config=True)
 
+config = open('QuizBankBackend/setting.json')
+config = json.load(config)
+credentialPath = config['OCRCredentialPath']
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentialPath
+
 app.config['SECRET_KEY'] = os.urandom(24)
 app.config['SESSION_COOKIE_SECURE'] = True
 app.config['JWT_SECRET_KEY'] = os.urandom(24)
@@ -25,7 +30,7 @@ app.config['JWT_COOKIE_CSRF_PROTECT'] = False
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USERNAME'] = 'quizbank401@gmail.com'
-app.config['MAIL_PASSWORD'] = 'izmvjdtfhqczimpn'
+app.config['MAIL_PASSWORD'] = config['GmailAppPassword']
 app.config['MAIL_USE_TLS'] = True
 
 mail = Mail(app)
@@ -33,11 +38,6 @@ csrf = CSRFProtect(app)
 jwt = JWTManager(app)
 api = Api(app)
 wtforms_json.init()
-
-config = open('QuizBankBackend/setting.json')
-config = json.load(config)
-credentialPath = config['OCRCredentialPath']
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentialPath
 
 class CSRFToken(Resource):
     def get(self):
