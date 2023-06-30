@@ -100,7 +100,6 @@ class AnswerResource(Resource):
         response = setResponse(400, 'Failed to update answer.')
         return response
     
-
 class TagResource(Resource):
     @jwt_required()
     def patch(self):

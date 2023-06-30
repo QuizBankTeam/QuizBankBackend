@@ -16,7 +16,6 @@ class GetQuestioSetForm(FlaskForm):
         ]
     )
 
-
 class PostQuestionSetForm(FlaskForm):
     description = StringField(
         label='description',
@@ -44,7 +43,6 @@ class PostQuestionSetForm(FlaskForm):
             UUID()
         ]
     )
-
 
 class PutQuestionSetForm(PostQuestionSetForm):
     questionSetId = StringField(

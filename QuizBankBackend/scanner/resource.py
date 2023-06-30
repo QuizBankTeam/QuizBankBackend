@@ -9,7 +9,6 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from google.cloud import vision
 
 
-
 class ScannerResource(Resource):
     @jwt_required()
     def post(self):
@@ -29,7 +28,6 @@ class ScannerResource(Resource):
         response = setResponse(400, 'Failed to detect text.')
         return response
 
-
 class AllImgurPhotoResource(Resource):
     @jwt_required()
     def get(self):
@@ -41,7 +39,6 @@ class AllImgurPhotoResource(Resource):
 
         response = setResponse(404, 'Images not found.')
         return response
-
 
 class ImgurPhotoResource(Resource):
     def get(self):
@@ -58,7 +55,6 @@ class ImgurPhotoResource(Resource):
 
         response = setResponse(404, 'Failed to get image.')
         return response
-
 
     @jwt_required()
     def post(self):

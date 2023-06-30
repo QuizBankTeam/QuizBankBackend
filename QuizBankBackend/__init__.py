@@ -6,6 +6,7 @@ from flask import Flask
 from flask_wtf.csrf import CSRFProtect, generate_csrf 
 from flask_restful import Api, Resource
 from flask_jwt_extended import JWTManager
+from flask_mail import Mail
 from QuizBankBackend.utility import setResponse
 from google.cloud import vision
 
@@ -21,6 +22,13 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=30)
 app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=1)
 app.config['JWT_COOKIE_CSRF_PROTECT'] = False
 
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USERNAME'] = 'quizbank401@gmail.com'
+app.config['MAIL_PASSWORD'] = 'izmvjdtfhqczimpn'
+app.config['MAIL_USE_TLS'] = True
+
+mail = Mail(app)
 csrf = CSRFProtect(app)
 jwt = JWTManager(app)
 api = Api(app)

@@ -2,6 +2,7 @@ import requests
 import json
 from QuizBankBackend import config
 
+
 imgurUrl = 'https://api.imgur.com/3/image'
 authHeader = 'Authorization'
 clientId = config['ImgurClientId']

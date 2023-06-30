@@ -2,11 +2,18 @@ import uuid
 from QuizBankBackend.db import db
 from QuizBankBackend.user.form import *
 from QuizBankBackend.utility import setResponse
+from QuizBankBackend.user.callback import *
 from flask import request
 from flask_restful import Resource
-from flask_jwt_extended import create_access_token, create_refresh_token
-from flask_jwt_extended import unset_access_cookies, set_access_cookies, set_refresh_cookies
-from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_request
+from flask_jwt_extended import (
+    create_access_token,
+    create_refresh_token,
+    unset_access_cookies,
+    set_access_cookies,
+    set_refresh_cookies,
+    jwt_required,
+    get_jwt_identity 
+)
 
 
 class UserProfileResource(Resource):
@@ -94,11 +101,73 @@ class LogoutResource(Resource):
         unset_access_cookies(response)
         return response
 
-
 class RefreshTokenResource(Resource):
     @jwt_required(refresh=True)
     def post(self):
         identity = get_jwt_identity()
         response = setResponse(200, 'Refresh token successfully.')
         set_access_cookies(response, create_access_token(identity=identity))
+        return response
+
+class ResetPasswordResource(Resource):
+    def patch(self):
+        formJson = request.get_json()
+        form = ResetPasswordForm.from_json(formJson)
+
+        if form.validate():
+            userId = get_jwt_identity()
+            user = db.users.find_one({'_id': userId})
+
+            if user is None:
+                response = setResponse(404, 'User not found.')
+                return response
+            elif user['password'] != formJson['password']:
+                response = setResponse(401, 'Wrong password.')
+                return response
+            elif user['password'] == formJson['newPassword']:
+                response = setResponse(409, 'New password is the same as the old one.')
+                return response
+            elif formJson['newPassword'] != formJson['confirmNewPassword']:
+                response = setResponse(409, 'Confirm password is not the same as the new one.')
+                return response
+
+            db.users.update_one(
+                {'_id': userId},
+                {'$set': {'password': formJson['newPassword']}}
+            )
+
+            response = setResponse(200, 'Reset password successfully.')
+            return response
+
+        response = setResponse(400, 'Failed to reset password.')
+        return response
+
+class ForgotPasswordResource(Resource):
+    def patch(self):
+        formJson = request.get_json()
+        form = ForgotPasswordForm.from_json(formJson)
+
+        if form.validate():
+            user = db.users.find_one({'email': formJson['email']})
+
+            if user is None:
+                response = setResponse(404, 'User not found.')
+                return response
+            
+            sendEmail(user)
+
+            response = setResponse(200, 'Forgot password successfully.')
+            return response
+
+        response = setResponse(400, 'Failed to forgot password.')
+        return response
+    
+class VerifyTokenResource(Resource):
+    def get(self, token):
+        user = verifyUserJWSToken(token)
+        if user is None:
+            response = setResponse(401, 'Invalid token. Please try again.')
+            return response
+        
+        response = setResponse(200, 'Reset token successfully.')
         return response

@@ -5,7 +5,6 @@ from wtforms.validators import DataRequired, UUID
 
 QUESTION_BANK_TYPE = ['multi', 'single', 'public']
 
-
 class GetAllQuestionBanksForm(FlaskForm):
     class Meta:
         csrf = False
@@ -14,7 +13,6 @@ class GetAllQuestionBanksForm(FlaskForm):
         label='bankType',
         choices=QUESTION_BANK_TYPE
     )
-
 
 class GetQuestionBankForm(FlaskForm):
     class Meta:
@@ -27,7 +25,6 @@ class GetQuestionBankForm(FlaskForm):
             UUID()
         ]
     )
-
 
 class PostQuestionBankForm(FlaskForm):
     title = StringField(
@@ -57,7 +54,6 @@ class PostQuestionBankForm(FlaskForm):
         ]
     )
 
-
 class PutQuestionBankForm(PostQuestionBankForm):
     questionBankId = StringField(
         label='questionBankId',
@@ -66,7 +62,6 @@ class PutQuestionBankForm(PostQuestionBankForm):
             UUID()
         ]
     )
-
 
 class DeleteQuestionBankForm(GetQuestionBankForm):
     class Meta:

@@ -16,10 +16,8 @@ class GetQuestionForm(FlaskForm):
         ]
     )
 
-
 QUESTION_TYPE = ['Filling', 'MultipleChoiceS',
                  'ShortAnswer', 'MultipleChoiceM', 'TrueOrFalse']
-
 
 class PostQuestionForm(FlaskForm):
     title = StringField(
@@ -77,7 +75,6 @@ class PostQuestionForm(FlaskForm):
         validators=[DataRequired()]
     ))
 
-
 class PutQuestionForm(PostQuestionForm):
     questionId = StringField(
         label='questionId',
@@ -87,11 +84,9 @@ class PutQuestionForm(PostQuestionForm):
         ]
     )
 
-
 class DeleteQuestionForm(GetQuestionForm):
     class Meta:
         csrf = True
-
 
 class PatchAnswerForm(FlaskForm):
     questionId = StringField(
@@ -115,7 +110,6 @@ class PatchAnswerForm(FlaskForm):
         label='answerDescription',
         validators=[DataRequired()]
     )
-
 
 class PatchTagForm(FlaskForm):
     questionId = StringField(

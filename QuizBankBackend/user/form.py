@@ -15,7 +15,6 @@ class GetUserForm(FlaskForm):
         ]
     )
 
-
 class RegisterForm(FlaskForm):
     username = StringField(
         label='username',
@@ -45,4 +44,27 @@ class LoginForm(FlaskForm):
     password = PasswordField(
         label='password',
         validators=[DataRequired()]
+    )
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField(
+        label='password',
+        validators=[DataRequired()]
+    )
+    newPassword = PasswordField(
+        label='newPassword',
+        validators=[DataRequired()]
+    )
+    confirmNewPassword = PasswordField(
+        label='confirmNewPassword',
+        validators=[DataRequired()]
+    )
+
+class ForgotPasswordForm(FlaskForm):
+    email = EmailField(
+        label='email',
+        validators=[
+            DataRequired(),
+            Email()
+        ]
     )
