@@ -3,18 +3,6 @@ from wtforms import StringField, EmailField, PasswordField, DateField
 from wtforms.validators import DataRequired, UUID, Email
 
 
-class GetUserForm(FlaskForm):
-    class Meta:
-        csrf = False
-
-    userId = StringField(
-        label='userId',
-        validators=[
-            DataRequired(),
-            UUID()
-        ]
-    )
-
 class RegisterForm(FlaskForm):
     username = StringField(
         label='username',

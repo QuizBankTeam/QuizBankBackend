@@ -8,23 +8,17 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
 class QuestionSetResource(Resource):
-    def get(self):
-        formJson = request.get_json()
-        form = GetQuestioSetForm.from_json(formJson)
+    def get(self, questionSetId):
+        questionSet = db.questionSets.find_one({'_id': questionSetId})
 
-        if form.validate():
-            questionSet = db.questionSets.find_one(formJson['questionSetId'])
+        if questionSet is None:
+            response = setResponse(404, 'Question set not found.')
+            return response
+        else:
+            response = setResponse(
+                200, 'Get question set successfully.', 'questionSet', questionSet)
+            return response
 
-            if questionSet is None:
-                response = setResponse(404, 'Question set not found.')
-                return response
-            else:
-                response = setResponse(
-                    200, 'Get question set successfully.', 'questionSet', questionSet)
-                return response
-
-        response = setResponse(400, 'Failed to get question set.')
-        return response
 
     @jwt_required()
     def post(self):
@@ -62,14 +56,8 @@ class QuestionSetResource(Resource):
         return response
 
     @jwt_required()
-    def delete(self):
-        formJson = request.get_json()
-        form = DeleteQuestionSetForm.from_json(formJson)
+    def delete(self, questionSetId):
 
-        if form.validate():
-            db.questionSets.delete_one({'_id': formJson['questionSetId']})
-            response = setResponse(200, 'Delete question set successfully.')
-            return response
-
-        response = setResponse(400, 'Failed to delete questoin set.')
+        db.questionSets.delete_one({'_id': questionSetId})
+        response = setResponse(200, 'Delete question set successfully.')
         return response

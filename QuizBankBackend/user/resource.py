@@ -17,24 +17,18 @@ from flask_jwt_extended import (
 
 
 class UserProfileResource(Resource):
-    def get(self):
-        formJson = request.get_json()
-        form = GetUserForm.from_json(formJson)
+    def get(self, username):
+        user = db.users.find_one({'username': username})
 
-        if form.validate():
-            user = db.users.find_one({'_id': formJson['userId']})
-
-            if user is None:
-                response = setResponse(404, 'User not found.')
-                return response
-            else:
-                del user['password']
-
-            response = setResponse(200, 'Get user successfully.', 'user', user)
+        if user is None:
+            response = setResponse(404, 'User not found.')
             return response
+        else:
+            del user['password']
 
-        response = setResponse(400, 'Failed to get user profile.')
+        response = setResponse(200, 'Get user successfully.', 'user', user)
         return response
+
 
 class RegisterResource(Resource):
     def post(self):
@@ -143,7 +137,7 @@ class ResetPasswordResource(Resource):
         return response
 
 class ForgotPasswordResource(Resource):
-    def patch(self):
+    def post(self):
         formJson = request.get_json()
         form = ForgotPasswordForm.from_json(formJson)
 
