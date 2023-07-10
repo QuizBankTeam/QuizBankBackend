@@ -3,3 +3,4 @@ instance/
 build/
 *.egg-info/
 *.json
+quizbank/
