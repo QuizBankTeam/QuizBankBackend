@@ -28,8 +28,8 @@ wtforms_json.init()
 
 config = open('QuizBankBackend/setting.json')
 config = json.load(config)
-# credentialPath = config['OCRCredentialPath']
-# os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentialPath
+credentialPath = config['OCRCredentialPath']
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentialPath
 
 class CSRFToken(Resource):
     def get(self):
@@ -47,4 +47,4 @@ from QuizBankBackend.questionSet import router
 from QuizBankBackend.questionBank import router
 from QuizBankBackend.user import router
 from QuizBankBackend.quizRecord import router
-# from QuizBankBackend.scanner import router
+from QuizBankBackend.scanner import router
