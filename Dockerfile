@@ -3,4 +3,4 @@ WORKDIR /QuizBankBackend
 COPY . /QuizBankBackend
 RUN pip install e . -U
 EXPOSE 5000
-CMD ["flask", "--app", "QuizBankBackend", "run", "--debug", "--host=0.0.0.0"]
+CMD ["gunicorn", "-b", ":5000", "--workers=4", "--threads=4", "-preload", "wsgi:app"]

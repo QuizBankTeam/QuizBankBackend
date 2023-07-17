@@ -11,7 +11,8 @@ requirements = [
     'email_validator',
     'google-cloud-vision',
     'itsdangerous',
-    'Flask-Mail'
+    'Flask-Mail',
+    'gunicorn'
 ]
 
 setup(
