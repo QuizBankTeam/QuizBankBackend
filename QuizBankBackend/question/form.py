@@ -4,22 +4,8 @@ from wtforms.validators import DataRequired, UUID, Optional
 from QuizBankBackend.questionBank.form import QUESTION_BANK_TYPE
 
 
-class GetQuestionForm(FlaskForm):
-    class Meta:
-        csrf = False
-
-    questionId = StringField(
-        label='questionId',
-        validators=[
-            DataRequired(),
-            UUID()
-        ]
-    )
-
-
 QUESTION_TYPE = ['Filling', 'MultipleChoiceS',
                  'ShortAnswer', 'MultipleChoiceM', 'TrueOrFalse']
-
 
 class PostQuestionForm(FlaskForm):
     title = StringField(
@@ -77,7 +63,6 @@ class PostQuestionForm(FlaskForm):
         validators=[DataRequired()]
     ))
 
-
 class PutQuestionForm(PostQuestionForm):
     questionId = StringField(
         label='questionId',
@@ -86,12 +71,6 @@ class PutQuestionForm(PostQuestionForm):
             UUID()
         ]
     )
-
-
-class DeleteQuestionForm(GetQuestionForm):
-    class Meta:
-        csrf = True
-
 
 class PatchAnswerForm(FlaskForm):
     questionId = StringField(
@@ -115,7 +94,6 @@ class PatchAnswerForm(FlaskForm):
         label='answerDescription',
         validators=[DataRequired()]
     )
-
 
 class PatchTagForm(FlaskForm):
     questionId = StringField(

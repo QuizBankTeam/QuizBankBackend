@@ -1,0 +1,3 @@
+from QuizBankBackend import app
+
+

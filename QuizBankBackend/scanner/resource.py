@@ -9,7 +9,6 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from google.cloud import vision
 
 
-
 class ScannerResource(Resource):
     @jwt_required()
     def post(self):
@@ -29,7 +28,6 @@ class ScannerResource(Resource):
         response = setResponse(400, 'Failed to detect text.')
         return response
 
-
 class AllImgurPhotoResource(Resource):
     @jwt_required()
     def get(self):
@@ -42,23 +40,14 @@ class AllImgurPhotoResource(Resource):
         response = setResponse(404, 'Images not found.')
         return response
 
-
 class ImgurPhotoResource(Resource):
-    def get(self):
-        formJson = request.get_json()
-        form = GetImgurPhotoForm.from_json(formJson)
-
-        if form.validate():
-            image = db.photos.find_one({'_id': formJson['imageId']})
-            if image is None:
-                response = setResponse(404, 'Image not found.')
-                return response
-            response = setResponse(200, 'Get image successfully', 'image', image)
+    def get(self, imageId):
+        image = db.photos.find_one({'_id': imageId})
+        if image is None:
+            response = setResponse(404, 'Image not found.')
             return response
-
-        response = setResponse(404, 'Failed to get image.')
+        response = setResponse(200, 'Get image successfully', 'image', image)
         return response
-
 
     @jwt_required()
     def post(self):
@@ -86,15 +75,8 @@ class ImgurPhotoResource(Resource):
         return response
 
     @jwt_required()
-    def delete(self):
-        formJson = request.get_json()
-        form = DeleteImgurPhotoForm.from_json(formJson)
-
-        if form.validate():
-            db.photos.delete_one({'_id': formJson['imageId']})
-            deleteImage(formJson['deletehash'])
-            response = setResponse(200, 'Delete image successfully.')
-            return response
-
-        response = setResponse(400, 'Failed to delete image.')
+    def delete(self, imageId, deletehash):
+        db.photos.delete_one({'deletehash': deletehash})
+        deleteImage(deletehash)
+        response = setResponse(200, 'Delete image successfully.')
         return response

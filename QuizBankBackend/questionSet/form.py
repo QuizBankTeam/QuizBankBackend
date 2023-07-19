@@ -4,19 +4,6 @@ from wtforms.validators import DataRequired, UUID
 from QuizBankBackend.question.form import PostQuestionForm
 
 
-class GetQuestioSetForm(FlaskForm):
-    class Meta:
-        csrf = False
-
-    questionSetId = StringField(
-        label='questionSetId',
-        validators=[
-            DataRequired(),
-            UUID()
-        ]
-    )
-
-
 class PostQuestionSetForm(FlaskForm):
     description = StringField(
         label='description',
@@ -45,7 +32,6 @@ class PostQuestionSetForm(FlaskForm):
         ]
     )
 
-
 class PutQuestionSetForm(PostQuestionSetForm):
     questionSetId = StringField(
         label='questionSetId',
@@ -54,8 +40,3 @@ class PutQuestionSetForm(PostQuestionSetForm):
             UUID()
         ]
     )
-
-
-class DeleteQuestionSetForm(GetQuestioSetForm):
-    class Meta:
-        csrf = True

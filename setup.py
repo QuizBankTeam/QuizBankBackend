@@ -9,7 +9,10 @@ requirements = [
     'flask-restful',
     'flask-jwt-extended',
     'email_validator',
-    'google-cloud-vision'
+    'google-cloud-vision',
+    'itsdangerous',
+    'Flask-Mail',
+    'gunicorn'
 ]
 
 setup(

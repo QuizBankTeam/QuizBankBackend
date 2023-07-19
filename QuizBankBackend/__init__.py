@@ -6,35 +6,44 @@ from flask import Flask
 from flask_wtf.csrf import CSRFProtect, generate_csrf 
 from flask_restful import Api, Resource
 from flask_jwt_extended import JWTManager
+from flask_mail import Mail
 from QuizBankBackend.utility import setResponse
 from google.cloud import vision
 
 
 app = Flask(__name__, instance_relative_config=True)
 
-app.config['SECRET_KEY'] = os.urandom(24)
-# app.config['SESSION_COOKIE_SECURE'] = True
-app.config['JWT_SECRET_KEY'] = os.urandom(24)
-app.config['JWT_COOKIE_SECURE'] = True
-app.config['JWT_TOKEN_LOCATION'] = ['cookies']
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=30)
-app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=1)
-app.config['JWT_COOKIE_CSRF_PROTECT'] = False
-
-csrf = CSRFProtect(app)
-jwt = JWTManager(app)
-api = Api(app)
-wtforms_json.init()
-
 config = open('QuizBankBackend/setting.json')
 config = json.load(config)
 credentialPath = config['OCRCredentialPath']
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentialPath
 
+app.config['SECRET_KEY'] = os.urandom(24)
+# app.config['SESSION_COOKIE_SECURE'] = True
+app.config['JWT_SECRET_KEY'] = os.urandom(24)
+# app.config['JWT_COOKIE_SECURE'] = True
+app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=30)
+app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=1)
+app.config['JWT_COOKIE_CSRF_PROTECT'] = False
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USERNAME'] = 'quizbank401@gmail.com'
+app.config['MAIL_PASSWORD'] = config['GmailAppPassword']
+app.config['MAIL_USE_TLS'] = True
+
+mail = Mail(app)
+csrf = CSRFProtect(app)
+jwt = JWTManager(app)
+api = Api(app)
+wtforms_json.init()
+
 class CSRFToken(Resource):
     def get(self):
         response = setResponse(200, 'Hello world!')
-        response.set_cookie('CSRF-TOKEN', generate_csrf(), httponly=True, secure=True)
+        # response.set_cookie('CSRF-TOKEN', generate_csrf(), httponly=True, secure=True)
+        response.set_cookie('CSRF-TOKEN', generate_csrf(), httponly=True)
         return response
 
 

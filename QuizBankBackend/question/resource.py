@@ -8,23 +8,17 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
 class QuestionResource(Resource):
-    def get(self):
-        formJson = request.get_json()
-        form = GetQuestionForm.from_json(formJson)
+    def get(self, questionId):
+        question = db.questions.find_one({'_id': questionId})
 
-        if form.validate():
-            question = db.questions.find_one(formJson['questionId'])
+        if question is None:
+            response = setResponse(404, 'Question not found.')
+            return response
+        else:
+            response = setResponse(
+                200, 'Get question successfully.', 'question', question)
+            return response
 
-            if question is None:
-                response = setResponse(404, 'Question not found.')
-                return response
-            else:
-                response = setResponse(
-                    200, 'Get question successfully.', 'question', question)
-                return response
-
-        response = setResponse(400, 'Failed to get question.')
-        return response
 
     @jwt_required()
     def post(self):
@@ -49,6 +43,7 @@ class QuestionResource(Resource):
 
         if form.validate():
             filter = {'_id': formJson['questionId']}
+            del formJson['questionId']
             newQuesiton = {'$set': formJson}
             db.questions.update_one(filter, newQuesiton)
             response = setResponse(200, 'Update question successfully.')
@@ -58,16 +53,9 @@ class QuestionResource(Resource):
         return response
 
     @jwt_required()
-    def delete(self):
-        formJson = request.get_json()
-        form = DeleteQuestionForm.from_json(formJson)
-
-        if form.validate():
-            db.questions.delete_one({'_id': formJson['questionId']})
-            response = setResponse(200, 'Delete question successfully.')
-            return response
-
-        response = setResponse(400, 'Failed to delete question.')
+    def delete(self, questionId):
+        db.questions.delete_one({'_id': questionId})
+        response = setResponse(200, 'Delete question successfully.')
         return response
 
 class AnswerResource(Resource):
@@ -100,7 +88,6 @@ class AnswerResource(Resource):
         response = setResponse(400, 'Failed to update answer.')
         return response
     
-
 class TagResource(Resource):
     @jwt_required()
     def patch(self):
