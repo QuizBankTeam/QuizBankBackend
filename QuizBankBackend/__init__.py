@@ -19,9 +19,9 @@ credentialPath = config['OCRCredentialPath']
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentialPath
 
 app.config['SECRET_KEY'] = os.urandom(24)
-app.config['SESSION_COOKIE_SECURE'] = True
+# app.config['SESSION_COOKIE_SECURE'] = True
 app.config['JWT_SECRET_KEY'] = os.urandom(24)
-app.config['JWT_COOKIE_SECURE'] = True
+# app.config['JWT_COOKIE_SECURE'] = True
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=30)
 app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=1)
@@ -42,7 +42,8 @@ wtforms_json.init()
 class CSRFToken(Resource):
     def get(self):
         response = setResponse(200, 'Hello world!')
-        response.set_cookie('CSRF-TOKEN', generate_csrf(), httponly=True, secure=True)
+        # response.set_cookie('CSRF-TOKEN', generate_csrf(), httponly=True, secure=True)
+        response.set_cookie('CSRF-TOKEN', generate_csrf(), httponly=True)
         return response
 
 
