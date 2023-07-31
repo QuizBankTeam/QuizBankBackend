@@ -1,3 +1,2 @@
-from QuizBankBackend import app
-
-
+from QuizBankBackend import create_app
+app = create_app()
