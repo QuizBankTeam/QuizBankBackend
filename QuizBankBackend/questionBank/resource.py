@@ -1,4 +1,5 @@
 import uuid
+import logging
 from QuizBankBackend.db import db
 from QuizBankBackend.questionBank.form import *
 from QuizBankBackend.utility import setResponse
@@ -35,10 +36,12 @@ class QuestionBankResource(Resource):
         if questionBank is None:
             response = setResponse(404, 'Question bank not found.')
             return response
+        
+        logging.error(questions)
 
         response = setResponse(
             200,
-            'Get quesitons from question bank successfully.',
+            'Get questions from question bank successfully.',
             'questionBank',
             questionBank
         )
