@@ -16,7 +16,7 @@ def create_app():
     config = open('QuizBankBackend/setting.json')
     config = json.load(config)
     credentialPath = config['OCRCredentialPath']
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentialPath
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.getenv('HOME') + credentialPath
 
     app.config.from_pyfile('config.py')
 

@@ -23,8 +23,8 @@ pip install e . -U
 ```
 For python virtual environment
 ```
-python -m venv YOUR_VENV
-source YOUR_VENV/bin/activate
+python -m venv quizbank
+source quizbank/bin/activate
 pip install e . -U
 ```
 **Run**
