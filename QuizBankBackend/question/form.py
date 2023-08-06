@@ -56,7 +56,10 @@ class PostQuestionForm(FlaskForm):
         label='createdDate',
         validators=[DataRequired()]
     )
-    image = FieldList(StringField(
+    questionImage = FieldList(StringField(
+        validators=[DataRequired()]
+    ))
+    answerImage = FieldList(StringField(
         validators=[DataRequired()]
     ))
     tag = FieldList(StringField(
