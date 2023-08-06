@@ -1,11 +1,10 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, FieldList, SelectField, DateField, FormField, IntegerField, BooleanField, DateTimeField
 from wtforms.validators import DataRequired, UUID, Optional
-
+from QuizBankBackend.question.form import QUESTION_TYPE
 QUIZ_STATUS = ['draft', 'ready', 'doing']
 QUIZ_TYPE = ['single', 'casual']
-QUESTION_TYPE = ['Filling', 'MultipleChoiceS',
-                 'ShortAnswer', 'MultipleChoiceM', 'TrueOrFalse']
+
 
 class PostQuestionForm(FlaskForm):
     title = StringField(
@@ -55,7 +54,10 @@ class PostQuestionForm(FlaskForm):
         label='createdDate',
         validators=[DataRequired()]
     )
-    image = FieldList(StringField(
+    answerImage = FieldList(StringField(
+        validators=[DataRequired()]
+    ))
+    questionImage = FieldList(StringField(
         validators=[DataRequired()]
     ))
     tag = FieldList(StringField(
@@ -118,7 +120,10 @@ class PutQuestionForm(FlaskForm):
         label='createdDate',
         validators=[DataRequired()]
     )
-    image = FieldList(StringField(
+    answerImage = FieldList(StringField(
+        validators=[DataRequired()]
+    ))
+    questionImage = FieldList(StringField(
         validators=[DataRequired()]
     ))
     tag = FieldList(StringField(

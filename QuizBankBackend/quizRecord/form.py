@@ -1,12 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, FieldList, SelectField, DateField, FormField, IntegerField, BooleanField, DateTimeField
 from wtforms.validators import DataRequired, UUID, Optional
+from QuizBankBackend.quiz.form import QUIZ_TYPE
+from QuizBankBackend.question.form import QUESTION_TYPE
 
-QUIZ_TYPE = ['single', 'casual']
-CORRECT = ['true', 'false']
-QUIZRECORDTYPE = ['casual', 'single']
-QUESTION_TYPE = ['Filling', 'MultipleChoiceS',
-                 'ShortAnswer', 'MultipleChoiceM', 'TrueOrFalse']
 
 class CopyQuestionForm(FlaskForm):
     title = StringField(
@@ -63,7 +60,10 @@ class CopyQuestionForm(FlaskForm):
         label='createdDate',
         validators=[DataRequired()]
     )
-    image = FieldList(StringField(
+    answerImage = FieldList(StringField(
+        validators=[DataRequired()]
+    ))
+    questionImage = FieldList(StringField(
         validators=[DataRequired()]
     ))
     tag = FieldList(StringField(
@@ -89,7 +89,8 @@ class PostQuestionRecordForm(FlaskForm):
     )
     correct = BooleanField(
         label='correct',
-        validators=[DataRequired()]
+        validators=[DataRequired()],
+        false_values={}
     )
     date = DateField(
         label='date',
