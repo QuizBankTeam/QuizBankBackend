@@ -35,5 +35,9 @@ or run `build.sh` in **linux**
 ```
 ./build.sh
 ```
+or run in Docker container
+```
+docker run -p 5000:5000 --name quizbank -v ~/.config/gcloud:/root/.config/gcloud -e HOME=/root -d youwaiting/quizbank:NO_WSGI
+```
 ## API Description
 [API Document](https://hackmd.io/@5ljei2jDT1KwLOo0tzos2w/Sk4YwJqw3)

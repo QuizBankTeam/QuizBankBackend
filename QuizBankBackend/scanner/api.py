@@ -87,7 +87,7 @@ def asyncDetectDocument(gcs_source_uri, gcs_destination_uri):
         for blob in list(bucket.list_blobs(prefix=prefix))
         if not blob.name.endswith("/")
     ]
-    print("Output files:")
+    # print("Output files:")
 
     result = ''
     for output in blob_list:
@@ -98,6 +98,6 @@ def asyncDetectDocument(gcs_source_uri, gcs_destination_uri):
             result += page['fullTextAnnotation']['text']
 
     deleteBlobFromBucket(blob_list)
-    print("Full text:\n")
-    print(result)
+    # print("Full text:\n")
+    # print(result)
     return result
