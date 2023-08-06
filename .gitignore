@@ -1,5 +1,4 @@
 __pycache__/
-instance/
 build/
 *.egg-info/
 *.json
