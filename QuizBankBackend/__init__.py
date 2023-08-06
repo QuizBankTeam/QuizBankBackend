@@ -8,7 +8,6 @@ from flask_jwt_extended import JWTManager
 from flask_mail import Mail
 from QuizBankBackend.utility import setResponse
 
-
 def create_app():
     global app, mail, csrf, jwt, api, config
     app = Flask(__name__, instance_relative_config=True)
@@ -41,6 +40,7 @@ def create_app():
     from QuizBankBackend.questionSet import router
     from QuizBankBackend.questionBank import router
     from QuizBankBackend.user import router
+    from QuizBankBackend.quiz import router
     from QuizBankBackend.quizRecord import router
     from QuizBankBackend.scanner import router
 
