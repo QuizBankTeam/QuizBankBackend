@@ -55,5 +55,6 @@ from QuizBankBackend.question import router
 from QuizBankBackend.questionSet import router
 from QuizBankBackend.questionBank import router
 from QuizBankBackend.user import router
+from QuizBankBackend.quiz import router
 from QuizBankBackend.quizRecord import router
 from QuizBankBackend.scanner import router
