@@ -1,7 +1,7 @@
 from flask import jsonify, make_response 
 
 
-def setResponse(code: int, message: str, data_str: str = None, data: dict = None):
+def setResponse(code: int, message: str, name: str = None, data = None):
     if data is None:
         response = make_response(jsonify({
             'status': code,
@@ -13,7 +13,7 @@ def setResponse(code: int, message: str, data_str: str = None, data: dict = None
     response = make_response(jsonify({
         'status': code,
         'message': message,
-        data_str: data
+        name: data
     }))
     response.status_code = code
     return response

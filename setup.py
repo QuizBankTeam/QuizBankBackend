@@ -14,6 +14,7 @@ requirements = [
     'Flask-Mail',
     'gunicorn',
     'google-cloud-storage',
+    'opencv-python'
 ]
 
 setup(

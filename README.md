@@ -1,7 +1,7 @@
 # QuizBankBackend
 **Environment**<br>
 Platform: Ubuntu 22.04 LTS<br>
-Python version: 3.9.13<br>
+Python version: 3.10.6<br>
 
 **Configuration**<br>
 You need to add those settings in `QuizBankBackend/setting.json`
