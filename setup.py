@@ -13,6 +13,7 @@ requirements = [
     'itsdangerous',
     'Flask-Mail',
     'gunicorn',
+    'google-cloud-storage',
 ]
 
 setup(

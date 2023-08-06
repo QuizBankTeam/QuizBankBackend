@@ -9,6 +9,12 @@ class OCRForm(FlaskForm):
         validators=[DataRequired()]
     )
 
+class DocumentOCRForm(FlaskForm):
+    document = StringField(
+        label='document',
+        validators=[DataRequired()]
+    )
+
 class PostImgurPhotoForm(FlaskForm):
     image = StringField(
         label='image',

@@ -1,4 +1,7 @@
 import base64
+import random
+import string
+import os
 from QuizBankBackend.scanner.form import *
 from QuizBankBackend.db import db
 from QuizBankBackend.utility import setResponse
@@ -16,11 +19,40 @@ class ScannerResource(Resource):
         form = OCRForm.from_json(formJson)
 
         if form.validate():
-            client = vision.ImageAnnotatorClient()
-            content = formJson['image']
-            image = vision.Image(content=content)
-            result = client.text_detection(image=image)
-            text = result.text_annotations[0].description
+            try:
+                client = vision.ImageAnnotatorClient()
+                content = formJson['image']
+                image = vision.Image(content=content)
+                result = client.text_detection(image=image)
+                text = result.text_annotations[0].description
+
+            except Exception as e:
+                response = setResponse(400, str(e))
+                return response
+
+            response = setResponse(200, 'Detect text Successfully.', 'text', text)
+            return response
+
+        response = setResponse(400, 'Failed to detect text.')
+        return response
+
+class DocumentScannerResource(Resource):
+    @jwt_required()
+    def post(self):
+        formJson = request.get_json()
+        form = DocumentOCRForm.from_json(formJson)
+
+        if form.validate():
+            try:
+                name = ''.join(random.choice(string.ascii_letters) for x in range(random.randint(1,32)))
+                fileName = f'{name}.pdf'
+                uploadFileToBucket('quizbank', fileName, formJson['document'])
+                text = asyncDetectDocument(f'gs://quizbank/{fileName}', f'gs://quizbank/{name}.json')
+                deleteFileFromBucket('quizbank', fileName)
+
+            except Exception as e:
+                response = setResponse(400, str(e))
+                return response
 
             response = setResponse(200, 'Detect text Successfully.', 'text', text)
             return response
