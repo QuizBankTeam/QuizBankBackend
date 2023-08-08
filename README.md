@@ -17,8 +17,8 @@ You need to add those settings in `QuizBankBackend/setting.json`
 **Build**<br>
 For conda virtual environment (recommanded)
 ```
-conda create --name YOUR_VENV 
-conda activate YOUR_VENV
+conda create --name quizbank 
+conda activate quizbank 
 pip install -e . -U
 ```
 For python virtual environment
@@ -37,7 +37,7 @@ or run `build.sh` in **linux**
 ```
 or run in Docker container
 ```
-docker run -p 5000:5000 --name quizbank -v ~/.config/gcloud:/root/.config/gcloud -e HOME=/root -d youwaiting/quizbank:NO_WSGI
+docker run -p 5000:5000 --name quizbank -v ~/.config/gcloud:/root/.config/gcloud -d youwaiting/quizbank:NO_WSGI
 ```
 ## API Description
 [API Document](https://hackmd.io/@5ljei2jDT1KwLOo0tzos2w/Sk4YwJqw3)
