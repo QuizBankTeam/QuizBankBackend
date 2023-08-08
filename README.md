@@ -41,3 +41,6 @@ docker run -p 5000:5000 --name quizbank -v ~/.config/gcloud:/root/.config/gcloud
 ```
 ## API Description
 [API Document](https://hackmd.io/@5ljei2jDT1KwLOo0tzos2w/Sk4YwJqw3)
+
+## Reference
+[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)
