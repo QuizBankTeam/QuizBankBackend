@@ -19,13 +19,13 @@ For conda virtual environment (recommanded)
 ```
 conda create --name YOUR_VENV 
 conda activate YOUR_VENV
-pip install e . -U
+pip install -e . -U
 ```
 For python virtual environment
 ```
 python -m venv quizbank
 source quizbank/bin/activate
-pip install e . -U
+pip install -e . -U
 ```
 **Run**
 ```

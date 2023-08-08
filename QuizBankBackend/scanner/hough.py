@@ -2,14 +2,18 @@ import base64
 import cv2
 import numpy as np
 
+import base64
+import cv2
+import numpy as np
+
 def readb64(base64String):
     imageString = base64.b64decode(base64String)
-    nparray = np.fromstring(imageString, np.uint8)
+    nparray = np.frombuffer(imageString, np.uint8)
     image = cv2.imdecode(nparray, cv2.IMREAD_COLOR)
     return image
 
 def writeb64(image):
-    base64String = cv2.imencode('.jpg', image)[1].tostring()
+    base64String = cv2.imencode('.jpg', image)[1].tobytes()
     base64String = base64.b64encode(base64String).decode('utf-8')
     return base64String
 

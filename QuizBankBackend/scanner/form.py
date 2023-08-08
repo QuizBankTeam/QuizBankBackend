@@ -20,3 +20,6 @@ class PostImgurPhotoForm(OCRForm):
 
 class HoughRotateForm(OCRForm):
     pass
+
+class RealESRGANForm(OCRForm):
+    pass

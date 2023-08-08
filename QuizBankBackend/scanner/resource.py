@@ -5,6 +5,7 @@ from QuizBankBackend.db import db
 from QuizBankBackend.utility import setResponse
 from QuizBankBackend.scanner.api import *
 from QuizBankBackend.scanner.hough import *
+from QuizBankBackend.scanner.realesrgan import *
 from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -130,4 +131,24 @@ class HoughRotateResource(Resource):
             return response
 
         response = setResponse(400, 'Failed to rotate image.')
+        return response
+    
+class RealESRGANResource(Resource):
+    @jwt_required()
+    def post(self):
+        formJson = request.get_json()
+        form = RealESRGANForm.from_json(formJson)
+
+        if form.validate():
+            try:
+                b64Image = formJson['image']
+                image = imageEnhanceWrapper(b64Image)
+                response = setResponse(200, 'enhance image resolution successfully.', 'image', image)
+            except Exception as e:
+                response = setResponse(400, str(e))
+                return response
+
+            return response
+
+        response = setResponse(400, 'Failed to enhance image resolution.')
         return response
