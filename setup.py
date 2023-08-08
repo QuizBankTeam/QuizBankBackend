@@ -14,8 +14,6 @@ requirements = [
     'Flask-Mail',
     'gunicorn',
     'google-cloud-storage',
-    'facexlib>=0.2.5',
-    'gfpgan>=1.3.5',
     'Pillow',
     'tqdm',
     'numpy',
