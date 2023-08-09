@@ -1,7 +1,7 @@
 # QuizBankBackend
 **Environment**<br>
 Platform: Ubuntu 22.04 LTS<br>
-Python version: 3.9.13<br>
+Python version: 3.10.6<br>
 
 **Configuration**<br>
 You need to add those settings in `QuizBankBackend/setting.json`
@@ -17,15 +17,15 @@ You need to add those settings in `QuizBankBackend/setting.json`
 **Build**<br>
 For conda virtual environment (recommanded)
 ```
-conda create --name YOUR_VENV 
-conda activate YOUR_VENV
-pip install e . -U
+conda create --name quizbank 
+conda activate quizbank 
+pip install -e . -U
 ```
 For python virtual environment
 ```
 python -m venv quizbank
 source quizbank/bin/activate
-pip install e . -U
+pip install -e . -U
 ```
 **Run**
 ```
@@ -37,7 +37,10 @@ or run `build.sh` in **linux**
 ```
 or run in Docker container
 ```
-docker run -p 5000:5000 --name quizbank -v ~/.config/gcloud:/root/.config/gcloud -e HOME=/root -d youwaiting/quizbank:NO_WSGI
+docker run -p 5000:5000 --name quizbank -v ~/.config/gcloud:/root/.config/gcloud -d youwaiting/quizbank:NO_WSGI
 ```
 ## API Description
 [API Document](https://hackmd.io/@5ljei2jDT1KwLOo0tzos2w/Sk4YwJqw3)
+
+## Reference
+[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)

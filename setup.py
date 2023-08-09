@@ -14,6 +14,12 @@ requirements = [
     'Flask-Mail',
     'gunicorn',
     'google-cloud-storage',
+    'Pillow',
+    'tqdm',
+    'numpy',
+    'basicsr>=1.4.2',
+    'opencv-python-headless',
+    'opencv-contrib-python-headless'
 ]
 
 setup(
