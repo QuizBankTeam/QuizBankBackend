@@ -2,15 +2,17 @@ import uuid
 from QuizBankBackend.db import db
 from QuizBankBackend.quizRecord.form import *
 from QuizBankBackend.utility import setResponse
+from QuizBankBackend.constant import *
 from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
-QUIZRECORDTYPE = ['casual', 'single']
+
+
 class AllQuizRecordResource(Resource):
     @jwt_required()
     def get(self):
         quizRecordType = request.args.get('quizRecordType')
-        if quizRecordType in QUIZRECORDTYPE:
+        if quizRecordType in QUIZ_RECORD_TYPE:
             userId = get_jwt_identity()
             recordFilter = {'type': quizRecordType, 'members': {"$in" : [userId]}}
             quizRecords = list(db.quizRecords.find(recordFilter))
