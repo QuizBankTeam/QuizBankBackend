@@ -10,7 +10,8 @@ You need to add those settings in `QuizBankBackend/setting.json`
     "MongodbUri": "YOUR_MONGODB_URI",
     "OCRCredentialPath": "YOUR_OCR_CREDENTIAL_PATH",
     "ImgurClientId": "YOUR_CLIENT_ID",
-    "GmailAppPassword": "YOUR_GMAIL_APP_PASSWORD"
+    "GmailAppPassword": "YOUR_GMAIL_APP_PASSWORD",
+    "GCPProjectId": "YOUR_GCP_PROJECT_ID"
 }
 ```
 
