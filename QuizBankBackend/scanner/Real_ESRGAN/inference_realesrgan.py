@@ -2,9 +2,9 @@ import os
 from basicsr.archs.rrdbnet_arch import RRDBNet
 from basicsr.utils.download_util import load_file_from_url
 
-from QuizBankBackend.scanner.RealESRGAN.enhancer_config import RealESRGANConfig
+from QuizBankBackend.scanner.Real_ESRGAN.enhancer_config import RealESRGANConfig
 from QuizBankBackend.scanner.hough import writeb64, readb64
-from QuizBankBackend.scanner.RealESRGAN.realesrgan import RealESRGANer
+from QuizBankBackend.scanner.Real_ESRGAN.realesrgan import RealESRGANer
 
 
 def imageEnhance(base64String):
