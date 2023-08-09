@@ -1,9 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, FieldList, SelectField, DateField, FormField, IntegerField, BooleanField, DateTimeField
-from wtforms.validators import DataRequired, UUID, Optional
-from QuizBankBackend.question.form import QUESTION_TYPE
-QUIZ_STATUS = ['draft', 'ready', 'doing']
-QUIZ_TYPE = ['single', 'casual']
+from wtforms import StringField, FieldList, SelectField, DateField, FormField, IntegerField, DateTimeField
+from wtforms.validators import DataRequired, UUID
+from QuizBankBackend.constant import *
 
 
 class PostQuestionForm(FlaskForm):

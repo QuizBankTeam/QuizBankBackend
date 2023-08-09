@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, FieldList, DateField, SelectField
 from wtforms.validators import DataRequired, UUID
+from QuizBankBackend.constant import *
 
 
-QUESTION_BANK_TYPE = ['multi', 'single', 'public']
 
 class PostQuestionBankForm(FlaskForm):
     title = StringField(

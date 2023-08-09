@@ -15,8 +15,11 @@ class DocumentOCRForm(FlaskForm):
         validators=[DataRequired()]
     )
 
-class PostImgurPhotoForm(FlaskForm):
-    image = StringField(
-        label='image',
-        validators=[DataRequired()]
-    )
+class PostImgurPhotoForm(OCRForm):
+    pass
+
+class HoughRotateForm(OCRForm):
+    pass
+
+class RealESRGANForm(OCRForm):
+    pass

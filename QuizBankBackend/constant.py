@@ -1,0 +1,5 @@
+QUIZ_STATUS = ['draft', 'ready', 'doing']
+QUIZ_TYPE = ['single', 'casual']
+QUIZ_RECORD_TYPE = ['single', 'casual']
+QUESTION_TYPE = ['Filling', 'MultipleChoiceS', 'ShortAnswer', 'MultipleChoiceM', 'TrueOrFalse']
+QUESTION_BANK_TYPE = ['multi', 'single', 'public']
