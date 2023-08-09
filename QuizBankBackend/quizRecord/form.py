@@ -1,8 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, FieldList, SelectField, DateField, FormField, IntegerField, BooleanField, DateTimeField
-from wtforms.validators import DataRequired, UUID, Optional
-from QuizBankBackend.quiz.form import QUIZ_TYPE
-from QuizBankBackend.question.form import QUESTION_TYPE
+from wtforms.validators import DataRequired, UUID
+from QuizBankBackend.constant import *
 
 
 class CopyQuestionForm(FlaskForm):
