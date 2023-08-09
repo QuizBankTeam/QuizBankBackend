@@ -1,5 +1,4 @@
-import json
-from QuizBankBackend import app, config
+from QuizBankBackend import config
 from pymongo import MongoClient
 
 

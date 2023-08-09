@@ -104,6 +104,7 @@ class RefreshTokenResource(Resource):
         return response
 
 class ResetPasswordResource(Resource):
+    @jwt_required()
     def patch(self):
         formJson = request.get_json()
         form = ResetPasswordForm.from_json(formJson)

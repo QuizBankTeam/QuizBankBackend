@@ -12,7 +12,8 @@ requirements = [
     'google-cloud-vision',
     'itsdangerous',
     'Flask-Mail',
-    'gunicorn'
+    'gunicorn',
+    'google-cloud-storage',
 ]
 
 setup(

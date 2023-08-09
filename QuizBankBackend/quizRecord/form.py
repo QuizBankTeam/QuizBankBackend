@@ -1,10 +1,74 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, FieldList, SelectField, DateField, FormField, IntegerField, BooleanField, DateTimeField
 from wtforms.validators import DataRequired, UUID, Optional
+from QuizBankBackend.quiz.form import QUIZ_TYPE
+from QuizBankBackend.question.form import QUESTION_TYPE
 
-QUIZ_TYPE = ['single', 'casual']
-CORRECT = ['true', 'false']
-QUIZRECORDTYPE = ['casual', 'single']
+
+class CopyQuestionForm(FlaskForm):
+    title = StringField(
+        label='title',
+        validators=[DataRequired()]
+    )
+    number = StringField(
+        label='number',
+        validators=[DataRequired()]
+    )
+    description = StringField(
+        label='description',
+        validators=[DataRequired()]
+    )
+    options = FieldList(StringField(
+        validators=[DataRequired()]
+    ))
+    questionType = SelectField(
+        label='questionType',
+        choices=QUESTION_TYPE
+    )
+    bankType = StringField(
+        label='bankType',
+        validators=[DataRequired()]
+    )
+    questionBank = StringField(
+        label='questionBank',
+        validators=[
+            DataRequired()
+        ]
+    )
+    answerOptions = FieldList(StringField(
+        validators=[DataRequired()]
+    ))
+    answerDescription = StringField(
+        label='answerDescription',
+        validators=[DataRequired()]
+    )
+    provider = StringField(
+        label='provider',
+        validators=[
+            DataRequired(),
+            UUID()
+        ]
+    )
+    originateFrom = StringField(
+        label='originateFrom',
+        validators=[
+            DataRequired(),
+            UUID()
+        ]
+    )
+    createdDate = DateField(
+        label='createdDate',
+        validators=[DataRequired()]
+    )
+    answerImage = FieldList(StringField(
+        validators=[DataRequired()]
+    ))
+    questionImage = FieldList(StringField(
+        validators=[DataRequired()]
+    ))
+    tag = FieldList(StringField(
+        validators=[DataRequired()]
+    ))
 
 class PostQuestionRecordForm(FlaskForm):
     user = StringField(
@@ -14,51 +78,25 @@ class PostQuestionRecordForm(FlaskForm):
             UUID()
         ]
     )
-    userAnswer = StringField(
+    userAnswerOptions = FieldList(
+        StringField(
+            label='userAnswerOptions',
+            validators=[DataRequired()])
+    )
+    userAnswerDescription = StringField(
         label='userAnswer',
         validators=[DataRequired()]
     )
-    correct = SelectField(
+    correct = BooleanField(
         label='correct',
-        choices=CORRECT,
-        validators=[DataRequired()]
+        validators=[DataRequired()],
+        false_values={}
     )
     date = DateField(
         label='date',
         validators=[DataRequired()]
     )
-    question = StringField(
-        label='question',
-        validators=[
-            DataRequired(),
-            UUID()
-        ]
-    )
-
-class AllQuizRecordForm(FlaskForm):
-    class Meta:
-        csrf = False
-        
-    quizRecordType = SelectField(
-        label='quizRecordType',
-        choices=QUIZRECORDTYPE,
-        validators=[
-            DataRequired()
-        ]
-    )
-
-class GetQuizRecordForm(FlaskForm):
-    class Meta:
-        csrf = False
-
-    quizRecordId = StringField(
-        label='quizRecordId',
-        validators=[
-            DataRequired(),
-            UUID()
-        ]
-    )
-
+    question = FormField(CopyQuestionForm)
 
 class PostQuizRecordForm(FlaskForm):
     title = StringField(
@@ -72,28 +110,24 @@ class PostQuizRecordForm(FlaskForm):
             UUID()
         ]
     )
-    date = DateField(
-        label='date',
-        validators=[DataRequired()]
-    )
     type = SelectField(
         label='type',
         choices=QUIZ_TYPE
     )
     totalScore = IntegerField(
-        label='date',
+        label='totalScore',
         validators=[DataRequired()]
     )
-    durningTime = IntegerField(
-        label='date',
+    duringTime = IntegerField(
+        label='duringTime',
         validators=[DataRequired()]
     )
-    startDate = DateTimeField(
-            label='startDate',
+    startDateTime = DateTimeField(
+            label='startDateTime',
             validators=[DataRequired()]
         )
-    endDate = DateTimeField(
-        label='endDate',
+    endDateTime = DateTimeField(
+        label='endDateTime',
         validators=[DataRequired()]
     )
     members = FieldList(
@@ -110,14 +144,14 @@ class PostQuizRecordForm(FlaskForm):
         min_entries=1
     )
     
-class DeleteQuizRecordForm(FlaskForm):
-    quizRecordId = StringField(
-        label='quizRecordId',
-        validators=[
-            DataRequired(),
-            UUID()
-        ]
-    )
+# class DeleteQuizRecordForm(FlaskForm):
+#     quizRecordId = StringField(
+#         label='quizRecordId',
+#         validators=[
+#             DataRequired(),
+#             UUID()
+#         ]
+#     )
 
    
     
