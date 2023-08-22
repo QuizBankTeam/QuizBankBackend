@@ -49,6 +49,10 @@ def imageEnhance(base64String):
         gpu_id=args.gpu_id)
 
     img = readb64(base64String)
+    height = img.shape[0]
+    width = img.shape[1]
+    if height * width == 810000:
+        return 'Image is too big.'
 
     try:
         output, _ = upsampler.enhance(img, outscale=args.outscale)

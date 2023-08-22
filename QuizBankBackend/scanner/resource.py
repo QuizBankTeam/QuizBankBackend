@@ -112,7 +112,7 @@ class ImgurPhotoResource(Resource):
         deleteImage(deletehash)
         response = setResponse(200, 'Delete image successfully.')
         return response
-    
+
 class HoughRotateResource(Resource):
     @jwt_required()
     def post(self):
@@ -132,7 +132,7 @@ class HoughRotateResource(Resource):
 
         response = setResponse(400, 'Failed to rotate image.')
         return response
-    
+
 class RealESRGANResource(Resource):
     @jwt_required()
     def post(self):

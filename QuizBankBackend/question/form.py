@@ -63,7 +63,7 @@ class PostQuestionForm(FlaskForm):
         validators=[DataRequired()]
     ))
 
-class PutQuestionForm(PostQuestionForm):
+class PutQuestionForm(FlaskForm):
     questionId = StringField(
         label='questionId',
         validators=[
@@ -71,6 +71,45 @@ class PutQuestionForm(PostQuestionForm):
             UUID()
         ]
     )
+    title = StringField(
+        label='title',
+        validators=[DataRequired()]
+    )
+    number = StringField(
+        label='number',
+        validators=[DataRequired()]
+    )
+    description = StringField(
+        label='description',
+        validators=[DataRequired()]
+    )
+    options = FieldList(StringField(
+        validators=[DataRequired()]
+    ))
+    questionType = SelectField(
+        label='questionType',
+        choices=QUESTION_TYPE
+    )
+    bankType = SelectField(
+        label='bankType',
+        choices=QUESTION_BANK_TYPE
+    )
+    answerOptions = FieldList(StringField(
+        validators=[DataRequired()]
+    ))
+    answerDescription = StringField(
+        label='answerDescription',
+        validators=[DataRequired()]
+    )
+    questionImage = FieldList(StringField(
+        validators=[DataRequired()]
+    ))
+    answerImage = FieldList(StringField(
+        validators=[DataRequired()]
+    ))
+    tag = FieldList(StringField(
+        validators=[DataRequired()]
+    ))
 
 class PatchAnswerForm(FlaskForm):
     questionId = StringField(

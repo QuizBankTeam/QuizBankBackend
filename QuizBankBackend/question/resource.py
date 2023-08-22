@@ -30,7 +30,20 @@ class QuestionResource(Resource):
             formJson['_id'] = questionId
             formJson['provider'] = get_jwt_identity()
             db.questions.insert_one(formJson)
-            response = setResponse(201, 'Add question successfully!')
+            bank = db.questionBanks.find_one({'_id': formJson['questionBank']})
+            originateFrom = db.users.find_one({'_id': formJson['originateFrom']})
+
+            if bank is None:
+                response = setResponse(400, 'Question bank does not existed.')
+                return response
+            elif originateFrom is None:
+                response = setResponse(400, 'Original user does not existed.')
+                return response
+
+            response = setResponse(201,
+                                   'Add question successfully!',
+                                   'question',
+                                   formJson)
             return response
 
         response = setResponse(400, 'Failed to add question.')
@@ -43,10 +56,22 @@ class QuestionResource(Resource):
 
         if form.validate():
             filter = {'_id': formJson['questionId']}
+
             del formJson['questionId']
+            if formJson['createdDate'] is not None:
+                del formJson['createdDate']
+            if formJson['questionBank'] is not None:
+                del formJson['questionBank']
+            if formJson['originateFrom'] is not None:
+                del formJson['originateFrom']
+
             newQuesiton = {'$set': formJson}
             db.questions.update_one(filter, newQuesiton)
-            response = setResponse(200, 'Update question successfully.')
+            question = db.questions.find_one(filter)
+            response = setResponse(200,
+                                   'Update question successfully.',
+                                   'question',
+                                   question)
             return response
 
         response = setResponse(400, 'Failed to update question.')
@@ -65,6 +90,7 @@ class AnswerResource(Resource):
         form = PatchAnswerForm.from_json(formJson)
 
         if form.validate():
+            response = None
             if formJson['questionSetId'] is None:
                 filter = {'_id': formJson['questionId']}
                 answer = {'$set': {
@@ -72,6 +98,11 @@ class AnswerResource(Resource):
                     'answerDescription': formJson['answerDescription']
                 }}
                 db.questions.update_one(filter, answer)
+                question = db.questions.find_one(filter)
+                response = setResponse(200,
+                                       'Update answer successfully.',
+                                       'question',
+                                       question)
             else:
                 filter = {
                     '_id': formJson['questionSetId'],
@@ -82,12 +113,16 @@ class AnswerResource(Resource):
                     'questions.$.answerDescription': formJson['answerDescription']
                 }}
                 db.questionSets.update_one(filter, answer)
-            response = setResponse(200, 'Update answer successfully.')
+                db.questionSets.find(filter)
+                response = setResponse(200,
+                                       'Update answer successfully.',
+                                       'question',
+                                       question)
             return response
 
         response = setResponse(400, 'Failed to update answer.')
         return response
-    
+
 class TagResource(Resource):
     @jwt_required()
     def patch(self):
@@ -95,10 +130,16 @@ class TagResource(Resource):
         form = PatchTagForm.from_json(formJson)
 
         if form.validate():
+            response = None
             if formJson['questionSetId'] is None:
                 filter = {'_id': formJson['questionId']}
                 tag = {'$set': {'tag': formJson['tag']}}
                 db.questions.update_one(filter, tag)
+                question = db.questions.find_one(filter)
+                response = setResponse(200,
+                                       'Update tag successfully.',
+                                       'question',
+                                       question)
             else:
                 filter = {
                     '_id': formJson['questionSetId'],
@@ -108,7 +149,11 @@ class TagResource(Resource):
                     'questions.$.tag': formJson['tag']
                 }}
                 db.questionSets.update_one(filter, tag)
-            response = setResponse(200, 'Update tag successfully.')
+                question = db.questionSets.find_one(filter)
+                response = setResponse(200,
+                                       'Update tag successfully.',
+                                       'question',
+                                       question)
             return response
 
         response = setResponse(400, 'Failed to update tag.')

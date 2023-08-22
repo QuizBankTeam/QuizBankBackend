@@ -32,7 +32,7 @@ class PostQuestionSetForm(FlaskForm):
         ]
     )
 
-class PutQuestionSetForm(PostQuestionSetForm):
+class PutQuestionSetForm(FlaskForm):
     questionSetId = StringField(
         label='questionSetId',
         validators=[
@@ -40,3 +40,11 @@ class PutQuestionSetForm(PostQuestionSetForm):
             UUID()
         ]
     )
+    description = StringField(
+        label='description',
+        validators=[DataRequired()]
+    )
+    image = FieldList(StringField(
+        validators=[DataRequired()]
+    ))
+    questions = FieldList(FormField(PostQuestionForm))

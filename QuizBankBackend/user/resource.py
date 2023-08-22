@@ -12,7 +12,7 @@ from flask_jwt_extended import (
     set_access_cookies,
     set_refresh_cookies,
     jwt_required,
-    get_jwt_identity 
+    get_jwt_identity
 )
 
 
@@ -61,7 +61,7 @@ class RegisterResource(Resource):
 
             response = setResponse(status, msg)
             return response
-        
+
         response = setResponse(400, 'Failed to register.')
         return response
 
@@ -148,7 +148,7 @@ class ForgotPasswordResource(Resource):
             if user is None:
                 response = setResponse(404, 'User not found.')
                 return response
-            
+
             sendEmail(user)
 
             response = setResponse(200, 'Forgot password successfully.')
@@ -156,13 +156,13 @@ class ForgotPasswordResource(Resource):
 
         response = setResponse(400, 'Failed to forgot password.')
         return response
-    
+
 class VerifyTokenResource(Resource):
     def get(self, token):
         user = verifyUserJWSToken(token)
         if user is None:
             response = setResponse(401, 'Invalid token. Please try again.')
             return response
-        
+
         response = setResponse(200, 'Reset token successfully.')
         return response

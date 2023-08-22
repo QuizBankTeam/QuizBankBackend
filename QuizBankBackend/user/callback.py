@@ -39,8 +39,8 @@ def verifyUserJWSToken(token: str):
     serializer = Serializer(app.config['SECRET_KEY'])
     try:
         userId = serializer.loads(token, max_age=300)['userId']
-    except:
-        return None
+    except Exception as err:
+        return err
     return db.users.find_one({'_id': userId})
 
 def sendEmail(user: dict):

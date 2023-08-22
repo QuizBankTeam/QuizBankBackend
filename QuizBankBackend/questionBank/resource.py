@@ -11,7 +11,10 @@ class AllQuestionBankResource(Resource):
     @jwt_required()
     def get(self, bankType):
         userId = get_jwt_identity()
-        banks = db.questionBanks.find({'creator': userId, 'questionBankType': bankType})
+        banks = db.questionBanks.find({
+            'creator': userId,
+            'questionBankType': bankType
+        })
 
         response = setResponse(
             200,
@@ -52,8 +55,28 @@ class QuestionBankResource(Resource):
         if form.validate():
             formJson['_id'] = str(uuid.uuid4())
             formJson['creator'] = get_jwt_identity()
+
+            originateFrom = db.users.find_one({'_id': formJson['originateFrom']})
+            members = formJson['members']
+
+            if originateFrom is None:
+                response = setResponse(400, 'Original user does not existed.')
+                return response
+
+            for member in members:
+                user = db.users.find_one({'_id': member})
+                if user is None:
+                    response = setResponse(400, 'Member ' + member + ' does not existed.')
+                    return response
+
             db.questionBanks.insert_one(formJson)
-            response = setResponse(201, 'Create a question bank successfully.')
+
+            response = setResponse(
+                201,
+               'Create a question bank successfully.',
+               'questionBank',
+               formJson
+            )
             return response
 
         response = setResponse(400, 'Failed to create a question bank.')
@@ -68,9 +91,22 @@ class QuestionBankResource(Resource):
             filter = {'_id': formJson['questionBankId']}
             questionBank = formJson.copy()
             del questionBank['questionBankId']
+            members = formJson['members']
+
+            for member in members:
+                user = db.users.find_one({'_id': member})
+                if user is None:
+                    response = setResponse(400, 'Member ' + member + ' does not existed.')
+                    return response
+
             db.questionBanks.update_one(filter, {'$set': questionBank})
+            questionBank = db.questionBanks.find_one(filter)
             response = setResponse(
-                200, 'Update question bank info successfully.')
+                200,
+                'Update question bank info successfully.',
+                'questionBank',
+                questionBank
+            )
             return response
 
         response = setResponse(400, 'Failed to update question bank info.')
