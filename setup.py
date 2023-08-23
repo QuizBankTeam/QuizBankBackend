@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 requirements = [
     'Flask',
     'Flask-WTF',
-    'pymongo',
+    'pymongo[srv]',
     'WTForms',
     'WTForms-JSON',
     'flask-restful',
@@ -19,7 +19,8 @@ requirements = [
     'numpy',
     'basicsr>=1.4.2',
     'opencv-python-headless',
-    'opencv-contrib-python-headless'
+    'opencv-contrib-python-headless',
+    'Flask-Limiter'
 ]
 
 setup(

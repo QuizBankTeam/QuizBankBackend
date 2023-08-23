@@ -6,6 +6,7 @@ from QuizBankBackend.utility import setResponse
 from QuizBankBackend.scanner.api import *
 from QuizBankBackend.scanner.hough import *
 from QuizBankBackend.scanner.realesrgan import *
+from QuizBankBackend import limiter
 from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -112,7 +113,7 @@ class ImgurPhotoResource(Resource):
         deleteImage(deletehash)
         response = setResponse(200, 'Delete image successfully.')
         return response
-    
+
 class HoughRotateResource(Resource):
     @jwt_required()
     def post(self):
@@ -132,9 +133,10 @@ class HoughRotateResource(Resource):
 
         response = setResponse(400, 'Failed to rotate image.')
         return response
-    
+
 class RealESRGANResource(Resource):
     @jwt_required()
+    @limiter.limit('1/minute')
     def post(self):
         formJson = request.get_json()
         form = RealESRGANForm.from_json(formJson)
@@ -143,6 +145,10 @@ class RealESRGANResource(Resource):
             try:
                 b64Image = formJson['image']
                 image = imageEnhanceWrapper(b64Image)
+                if image == 'Image is too big.':
+                    response = setResponse(400, image)
+                    return response
+
                 response = setResponse(200, 'enhance image resolution successfully.', 'image', image)
             except Exception as e:
                 response = setResponse(400, str(e))

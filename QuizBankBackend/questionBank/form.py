@@ -33,11 +33,26 @@ class PostQuestionBankForm(FlaskForm):
         ]
     )
 
-class PutQuestionBankForm(PostQuestionBankForm):
+class PutQuestionBankForm(FlaskForm):
     questionBankId = StringField(
         label='questionBankId',
         validators=[
             DataRequired(),
             UUID()
         ]
+    )
+    title = StringField(
+        label='title',
+        validators=[DataRequired()]
+    )
+    questionBankType = SelectField(
+        label='questionBankType',
+        choices=QUESTION_BANK_TYPE
+    )
+    members = FieldList(
+        StringField(validators=[
+            DataRequired(),
+            UUID()
+        ]),
+        min_entries=1
     )
