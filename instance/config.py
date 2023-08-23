@@ -6,7 +6,8 @@ from datetime import timedelta
 
 DEBUG = True
 WTF_CSRF_TIME_LIMIT = 86400
-SECRET_KEY = os.urandom(24)
+# SECRET_KEY = os.urandom(24)
+SECRET_KEY = config['SecretKey']
 # SESSION_COOKIE_SECURE = True
 JWT_SECRET_KEY = os.urandom(24)
 # JWT_COOKIE_SECURE = True
