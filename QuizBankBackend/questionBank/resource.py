@@ -30,14 +30,16 @@ class QuestionBankResource(Resource):
         bankFilter = {'_id': questionBankId}
         questionFilter = {'questionBank': questionBankId}
         questionBank = db.questionBanks.find_one(bankFilter)
+
+        if questionBank is None:
+            response = setResponse(404, 'Question bank not found.')
+            return response
+
         questionSets = list(db.questionSets.find(questionFilter))
         questions = list(db.questions.find(questionFilter))
 
         questionBank['questionSets'] = questionSets
         questionBank['questions'] = questions
-        if questionBank is None:
-            response = setResponse(404, 'Question bank not found.')
-            return response
 
         response = setResponse(
             200,
