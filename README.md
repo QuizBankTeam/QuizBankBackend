@@ -11,15 +11,16 @@ You need to add those settings in `QuizBankBackend/setting.json`
     "OCRCredentialPath": "YOUR_OCR_CREDENTIAL_PATH",
     "ImgurClientId": "YOUR_CLIENT_ID",
     "GmailAppPassword": "YOUR_GMAIL_APP_PASSWORD",
-    "GCPProjectId": "YOUR_GCP_PROJECT_ID"
+    "GCPProjectId": "YOUR_GCP_PROJECT_ID",
+    "SecretKey": "YOUR_SECRET_KEY"
 }
 ```
 
 **Build**<br>
 For conda virtual environment (recommanded)
 ```
-conda create --name quizbank 
-conda activate quizbank 
+conda create --name quizbank
+conda activate quizbank
 pip install -e . -U
 ```
 For python virtual environment
@@ -32,9 +33,9 @@ pip install -e . -U
 ```
 flask --app QuizBankBackend run --debug --host=0.0.0.0
 ```
-or run `build.sh` in **linux**
+or run `run.sh` in **linux**
 ```
-./build.sh
+./run.sh
 ```
 or run in Docker container
 ```
