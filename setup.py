@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 requirements = [
     'Flask',
     'Flask-WTF',
-    'pymongo',
+    'pymongo[srv]',
     'WTForms',
     'WTForms-JSON',
     'flask-restful',

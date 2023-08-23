@@ -1,5 +1,6 @@
 import os
 import json
+import logging
 import wtforms_json
 from flask import Flask, Blueprint
 from flask_wtf.csrf import CSRFProtect, generate_csrf
@@ -36,6 +37,10 @@ def create_app():
     jwt = JWTManager(app)
     api = Api(app)
     wtforms_json.init()
+
+    gunicorn_logger = logging.getLogger('gunicorn.error')
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)
 
     class CSRFToken(Resource):
         def get(self):
