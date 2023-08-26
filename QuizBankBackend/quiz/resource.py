@@ -31,7 +31,7 @@ class AllQuizResource(Resource):
         response = setResponse(
             200,
             'Get all quiz successfully.',
-            'quiz',
+            'quizList',
             quiz
         )
         return response
