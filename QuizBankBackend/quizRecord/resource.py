@@ -24,7 +24,7 @@ class AllQuizRecordResource(Resource):
             response = setResponse(
                 200,
                 'Get all quiz records successfully.',
-                'quizRecords',
+                'quizRecordList',
                 quizRecords
             )
             return response
@@ -79,7 +79,7 @@ class QuizRecordResource(Resource):
             del formJson['questionRecords']
             formJson['questionRecords'] = questionRecordIDs
             db.quizRecords.insert_one(formJson)
-            response = setResponse(200, 'Add quizRecord successfully', 'quizRecord', formJson)
+            response = setResponse(200, 'Add quizRecord successfully')
             return response
         else:
             for field, errors in form.errors.items():
