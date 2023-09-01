@@ -221,4 +221,14 @@ class PutQuizForm(FlaskForm):
         FormField(PutQuestionForm)
     )
 
-
+class addQuestionForm(FlaskForm):
+    quizId = StringField(
+        label='quizId',
+        validators=[
+            DataRequired(),
+            UUID()
+        ]
+    )
+    questions = FieldList(
+        FormField(PostQuestionForm)
+    )

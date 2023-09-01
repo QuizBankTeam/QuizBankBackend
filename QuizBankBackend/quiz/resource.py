@@ -130,3 +130,32 @@ class QuizResource(Resource):
             response = setResponse(
                 200, 'delete quiz record successfully.')
             return response
+    
+class AddQuestionResource(Resource):
+    @jwt_required()
+    def post(self):
+        formJson = request.get_json()
+        form = addQuestionForm.from_json(formJson)
+
+        if form.validate():
+            filter = {'_id': formJson['quizId']}
+            userId = get_jwt_identity()
+            quiz = db.quizs.find_one(filter)
+            for question in formJson['questions']:
+                questionId = str(uuid.uuid4())
+                question['_id'] = questionId
+                question['provider'] = userId
+                quiz['questions'].append(question)
+
+
+            updateQuestionForm = {'$set': {'question': quiz['questions']}}
+            db.quizs.update_one(filter, updateQuestionForm)
+            response = setResponse(200, 'Update quiz question successfully', 'quiz', quiz)
+            return response
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    print(f"Field: {field}, Error: {error}")
+            response = setResponse(
+                400, 'Failed to update quiz question.')
+            return response
