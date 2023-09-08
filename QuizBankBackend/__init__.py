@@ -22,8 +22,10 @@ def create_app():
     limiter = Limiter(
         get_remote_address,
         app=app,
-        storage_uri=config['MongodbUri'],
-        strategy="fixed-window"
+        # storage_uri=config['MongodbUri'],
+        # storage_uri='mongodb://localhost:27017/',
+        storage_uri=os.environ.get("FLASK_RATELIMIT_STORAGE_URI", "memory://"),
+        strategy='fixed-window'
     )
 
     credentialPath = config['OCRCredentialPath']
@@ -60,5 +62,6 @@ def create_app():
     from QuizBankBackend.quiz import router
     from QuizBankBackend.quizRecord import router
     from QuizBankBackend.scanner import router
+    from QuizBankBackend.group import router
 
     return app
