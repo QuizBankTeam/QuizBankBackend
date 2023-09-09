@@ -22,12 +22,6 @@ class PostGroupForm(FlaskForm):
             DataRequired()
         ]
     )
-    members = FieldList(StringField(
-        validators=[
-            DataRequired(),
-            UUID()
-        ]
-    ))
     questionBanks = FieldList(StringField(
         validators=[
             DataRequired(),
@@ -55,12 +49,6 @@ class PutGroupForm(FlaskForm):
             DataRequired()
         ]
     )
-    members = FieldList(StringField(
-        validators=[
-            DataRequired(),
-            UUID()
-        ]
-    ))
     questionBanks = FieldList(StringField(
         validators=[
             DataRequired(),

@@ -14,14 +14,14 @@ class GroupResource(Resource):
         if group is None:
             response = setResponse(404, 'Group does not existed.')
             return response
-        else:
-            response = setResponse(
-                200,
-               'Get group successfully',
-               'group',
-               group
-            )
-            return response
+
+        response = setResponse(
+            200,
+            'Get group successfully',
+            'group',
+            group
+        )
+        return response
 
     @jwt_required()
     def post(self):
@@ -48,8 +48,8 @@ class GroupResource(Resource):
                 formJson
             )
             return response
-        else:
-            return formFieldError(form)
+
+        return formFieldError(form)
 
     @jwt_required()
     def put(self):
@@ -57,40 +57,40 @@ class GroupResource(Resource):
         form = PutGroupForm.from_json(formJson)
 
         if form.validate():
-            group = db.groups.find_one({'_id': formJson['groupId']})
 
-            if group is None:
+
+            if isBase64(formJson['avatar']) is False and formJson['avatar'] is not None and formJson['avatar'] != "":
+                response = setResponse(400, 'Avatar is not base64.')
+                return response
+
+            formJson['_id'] = formJson['groupId']
+            del formJson['groupId']
+            result = db.groups.update_one(
+                {'_id': formJson['_id']},
+                {'$set': formJson}
+            )
+
+            if result.modified_count == 0:
                 response = setResponse(404, 'Group does not existed.')
                 return response
-            else:
-                if isBase64(formJson['avatar']) is False and formJson['avatar'] is not None and formJson['avatar'] != "":
-                    response = setResponse(400, 'Avatar is not base64.')
-                    return response
 
-                if get_jwt_identity() == group['creator']:
-                    formJson['_id'] = formJson['groupId']
-                    del formJson['groupId']
-                    db.groups.update_one(
-                        {'_id': formJson['_id']},
-                        {'$set': formJson}
-                    )
+            response = setResponse(
+                200,
+                'Update group successfully.',
+                'group',
+                formJson
+            )
+            return response
 
-                    response = setResponse(
-                        200,
-                        'Update group successfully.',
-                        'group',
-                        formJson
-                    )
-                    return response
-                else:
-                    response = setResponse(403, 'Permission denied.')
-                    return response
-        else:
-            return formFieldError(form)
+        return formFieldError(form)
 
     @jwt_required()
     def delete(self, groupId):
-        db.groups.delete_one({'_id': groupId})
+        result = db.groups.delete_one({'_id': groupId})
+
+        if result.deleted_count == 0:
+            response = setResponse(404, 'Group does not existed.')
+            return response
 
         response = setResponse(200, 'Delete group successfully.')
         return response
