@@ -36,6 +36,7 @@ class GroupResource(Resource):
 
             formJson['creator'] = get_jwt_identity()
             formJson['_id'] = str(uuid.uuid4())
+            formJson['members'] = []
             formJson['members'].append(formJson['creator'])
 
             db.groups.insert_one(formJson)
