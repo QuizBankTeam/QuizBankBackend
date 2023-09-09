@@ -23,7 +23,43 @@ class PostGroupForm(FlaskForm):
         ]
     )
     members = FieldList(StringField(
-        validators=[DataRequired()]
+        validators=[
+            DataRequired(),
+            UUID()
+        ]
+    ))
+    questionBanks = FieldList(StringField(
+        validators=[
+            DataRequired(),
+            UUID()
+        ]
+    ))
+
+class PutGroupForm(FlaskForm):
+    groupId = StringField(
+        label='groupId',
+        validators=[
+            DataRequired(),
+            UUID()
+        ]
+    )
+    avatar = StringField(
+        label='avatar',
+        validators=[
+            Optional()
+        ]
+    )
+    name = StringField(
+        label='name',
+        validators=[
+            DataRequired()
+        ]
+    )
+    members = FieldList(StringField(
+        validators=[
+            DataRequired(),
+            UUID()
+        ]
     ))
     questionBanks = FieldList(StringField(
         validators=[
