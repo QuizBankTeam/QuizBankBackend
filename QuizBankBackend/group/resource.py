@@ -33,7 +33,7 @@ class GroupResource(Resource):
             formJson['_id'] = str(uuid.uuid4())
             formJson['members'].append(formJson['creator'])
 
-            db.group.insert_one(formJson)
+            db.groups.insert_one(formJson)
 
             response = setResponse(
                 201,
