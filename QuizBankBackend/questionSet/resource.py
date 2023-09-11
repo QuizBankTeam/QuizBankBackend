@@ -1,7 +1,7 @@
 import uuid
 from QuizBankBackend.db import db
 from QuizBankBackend.questionSet.form import *
-from QuizBankBackend.utility import setResponse
+from QuizBankBackend.utility import setResponse, formFieldError
 from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -14,10 +14,10 @@ class QuestionSetResource(Resource):
         if questionSet is None:
             response = setResponse(404, 'Question set not found.')
             return response
-        else:
-            response = setResponse(
-                200, 'Get question set successfully.', 'questionSet', questionSet)
-            return response
+
+        response = setResponse(
+            200, 'Get question set successfully.', 'questionSet', questionSet)
+        return response
 
 
     @jwt_required()
@@ -61,8 +61,7 @@ class QuestionSetResource(Resource):
                                    formJson)
             return response
 
-        response = setResponse(400, 'Failed to add question set.')
-        return response
+        return formFieldError(form)
 
     @jwt_required()
     def put(self):
@@ -80,12 +79,16 @@ class QuestionSetResource(Resource):
                                    questionSet)
             return response
 
-        response = setResponse(400, 'Failed to update question set.')
-        return response
+        return formFieldError(form)
 
     @jwt_required()
     def delete(self, questionSetId):
 
-        db.questionSets.delete_one({'_id': questionSetId})
+        result = db.questionSets.delete_one({'_id': questionSetId})
+
+        if result.deleted_count == 0:
+            response = setResponse(400, 'Question set does not existed.')
+            return response
+
         response = setResponse(200, 'Delete question set successfully.')
         return response

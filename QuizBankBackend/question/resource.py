@@ -1,7 +1,7 @@
 import uuid
 from QuizBankBackend.db import db
 from QuizBankBackend.question.form import *
-from QuizBankBackend.utility import setResponse
+from QuizBankBackend.utility import setResponse, formFieldError
 from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -14,10 +14,10 @@ class QuestionResource(Resource):
         if question is None:
             response = setResponse(404, 'Question not found.')
             return response
-        else:
-            response = setResponse(
-                200, 'Get question successfully.', 'question', question)
-            return response
+
+        response = setResponse(
+            200, 'Get question successfully.', 'question', question)
+        return response
 
 
     @jwt_required()
@@ -46,8 +46,7 @@ class QuestionResource(Resource):
                                    formJson)
             return response
 
-        response = setResponse(400, 'Failed to add question.')
-        return response
+        return formFieldError(form)
 
     @jwt_required()
     def put(self):
@@ -74,12 +73,16 @@ class QuestionResource(Resource):
                                    question)
             return response
 
-        response = setResponse(400, 'Failed to update question.')
-        return response
+        return formFieldError(form)
 
     @jwt_required()
     def delete(self, questionId):
-        db.questions.delete_one({'_id': questionId})
+        result = db.questions.delete_one({'_id': questionId})
+
+        if result.deleted_count == 0:
+            response = setResponse(400, 'Question does not existed.')
+            return response
+
         response = setResponse(200, 'Delete question successfully.')
         return response
 
@@ -120,8 +123,7 @@ class AnswerResource(Resource):
                                        question)
             return response
 
-        response = setResponse(400, 'Failed to update answer.')
-        return response
+        return formFieldError(form)
 
 class TagResource(Resource):
     @jwt_required()
@@ -156,5 +158,4 @@ class TagResource(Resource):
                                        question)
             return response
 
-        response = setResponse(400, 'Failed to update tag.')
-        return response
+        return formFieldError(form)

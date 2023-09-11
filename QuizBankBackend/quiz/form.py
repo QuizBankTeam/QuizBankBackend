@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired, UUID
 from QuizBankBackend.constant import *
 
 
-class PostQuestionForm(FlaskForm):
+class PostQuizQuestionForm(FlaskForm):
     title = StringField(
         label='title',
         validators=[DataRequired()]
@@ -62,7 +62,7 @@ class PostQuestionForm(FlaskForm):
         validators=[DataRequired()]
     ))
 
-class PutQuestionForm(FlaskForm):
+class PutQuizQuestionForm(FlaskForm):
     questionId = StringField(
         label='questionId',
         validators=[DataRequired(), UUID()]
@@ -170,7 +170,7 @@ class PostQuizForm(FlaskForm):
         min_entries=1
     )
     questions = FieldList(
-        FormField(PostQuestionForm)
+        FormField(PostQuizQuestionForm)
     )
     
     
@@ -218,7 +218,7 @@ class PutQuizForm(FlaskForm):
         min_entries=1
     )
     questions = FieldList(
-        FormField(PutQuestionForm)
+        FormField(PutQuizQuestionForm)
     )
 
 

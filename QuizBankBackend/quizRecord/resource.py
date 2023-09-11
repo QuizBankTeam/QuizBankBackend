@@ -1,7 +1,7 @@
-import uuid
+import uuid, logging
 from QuizBankBackend.db import db
 from QuizBankBackend.quizRecord.form import *
-from QuizBankBackend.utility import setResponse
+from QuizBankBackend.utility import setResponse, formFieldError
 from QuizBankBackend.constant import *
 from flask import request
 from flask_restful import Resource
@@ -28,20 +28,20 @@ class AllQuizRecordResource(Resource):
                 quizRecords
             )
             return response
-        else:
-            response = setResponse(400, 'Failed to get all quiz records.')
-            return response
+
+        response = setResponse(400, 'Failed to get all quiz records.')
+        return response
         
 class QuizRecordResource(Resource):
     def get(self): 
         quizRecordId = request.args.get('quizRecordId')
         quizRecordFilter = {'_id': quizRecordId}
         quizRecord = db.quizRecords.find_one(quizRecordFilter)
-        questionIds = []
-        questions = []
+
         if quizRecordId is None:
             response = setResponse(400, 'Failed to get quizRecord.')
             return response
+
         if quizRecord is None:
             response = setResponse(404, 'Quiz Record not found.')
             return response
@@ -81,13 +81,8 @@ class QuizRecordResource(Resource):
             db.quizRecords.insert_one(formJson)
             response = setResponse(200, 'Add quizRecord successfully')
             return response
-        else:
-            for field, errors in form.errors.items():
-                for error in errors:
-                    print(f"Field: {field}, Error: {error}")
-            response = setResponse(
-                400, 'Failed to add quizRecord.')
-            return response
+
+        return formFieldError(form)
 
     @jwt_required()
     def delete(self): 
@@ -102,12 +97,13 @@ class QuizRecordResource(Resource):
         questionRecordFilter = {'quizRecord': quizRecordId}
         result = db.quizRecords.delete_one(quizRecordFilter)
         deleteNumbers = db.questionRecords.delete_many(questionRecordFilter)
-        if result.deleted_count==0:
+
+        if result.deleted_count == 0:
             response = setResponse(
             404, 'the quiz record that request to delete was not found.')
             return response
-        else:
-            print(f'delete question record numbers is{deleteNumbers}')
-            response = setResponse(
-                200, 'delete quiz record successfully.')
-            return response
+
+        logging.info(f'delete question record numbers is {deleteNumbers}')
+        response = setResponse(
+            200, 'delete quiz record successfully.')
+        return response

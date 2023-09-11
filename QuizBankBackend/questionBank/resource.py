@@ -1,7 +1,7 @@
 import uuid
 from QuizBankBackend.db import db
 from QuizBankBackend.questionBank.form import *
-from QuizBankBackend.utility import setResponse
+from QuizBankBackend.utility import setResponse, formFieldError
 from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -81,8 +81,7 @@ class QuestionBankResource(Resource):
             )
             return response
 
-        response = setResponse(400, 'Failed to create a question bank.')
-        return response
+        return formFieldError(form)
 
     @jwt_required()
     def put(self):
@@ -111,12 +110,16 @@ class QuestionBankResource(Resource):
             )
             return response
 
-        response = setResponse(400, 'Failed to update question bank info.')
-        return response
+        return formFieldError(form)
 
     @jwt_required()
     def delete(self, questionBankId):
-        db.questionBanks.delete_one({'_id': questionBankId})
+        result = db.questionBanks.delete_one({'_id': questionBankId})
+
+        if result.deleted_count == 0:
+            response = setResponse(404, 'Question bank not found.')
+            return response
+
         db.questions.delete_many({'questionBank': questionBankId})
         db.questionSets.delete_many({'questionBank': questionBankId})
 

@@ -2,7 +2,7 @@ import random
 import string
 from QuizBankBackend.scanner.form import *
 from QuizBankBackend.db import db
-from QuizBankBackend.utility import setResponse
+from QuizBankBackend.utility import setResponse, formFieldError
 from QuizBankBackend.scanner.api import *
 from QuizBankBackend.scanner.hough import *
 from QuizBankBackend.scanner.realesrgan import *
@@ -34,8 +34,7 @@ class ScannerResource(Resource):
             response = setResponse(200, 'Detect text Successfully.', 'text', text)
             return response
 
-        response = setResponse(400, 'Failed to detect text.')
-        return response
+        return formFieldError(form)
 
 class DocumentScannerResource(Resource):
     @jwt_required()
@@ -58,14 +57,14 @@ class DocumentScannerResource(Resource):
             response = setResponse(200, 'Detect text Successfully.', 'text', text)
             return response
 
-        response = setResponse(400, 'Failed to detect text.')
-        return response
+        return formFieldError(form)
 
 class AllImgurPhotoResource(Resource):
     @jwt_required()
     def get(self):
         userId = get_jwt_identity()
         images = db.photos.find({'owner': userId})
+
         if images is not None:
             response = setResponse(200, 'Get all images successfully.', 'images', list(images))
             return response
@@ -76,9 +75,11 @@ class AllImgurPhotoResource(Resource):
 class ImgurPhotoResource(Resource):
     def get(self, imageId):
         image = db.photos.find_one({'_id': imageId})
+
         if image is None:
             response = setResponse(404, 'Image not found.')
             return response
+
         response = setResponse(200, 'Get image successfully', 'image', image)
         return response
 
@@ -89,6 +90,7 @@ class ImgurPhotoResource(Resource):
 
         if form.validate():
             imgurRes = uploadImage(formJson['image'])
+
             if imgurRes['status'] == 200:
                 image = imgurRes['data']
                 ownerId = get_jwt_identity()
@@ -101,15 +103,20 @@ class ImgurPhotoResource(Resource):
                 })
                 response = setResponse(201, 'Upload an image successfully.')
                 return response
+
             response = setResponse(imgurRes['status'], 'Something wrong when you access imgur.')
             return response
 
-        response = setResponse(400, 'Failed to upload image.')
-        return response
+        return formFieldError(form)
 
     @jwt_required()
     def delete(self, imageId, deletehash):
-        db.photos.delete_one({'deletehash': deletehash})
+        result = db.photos.delete_one({'deletehash': deletehash})
+
+        if result.deleted_count == 0:
+            response = setResponse(404, 'Image not found.')
+            return response
+
         deleteImage(deletehash)
         response = setResponse(200, 'Delete image successfully.')
         return response
@@ -131,8 +138,7 @@ class HoughRotateResource(Resource):
             response = setResponse(200, 'Rotate image successfully.', 'image', image)
             return response
 
-        response = setResponse(400, 'Failed to rotate image.')
-        return response
+        return formFieldError(form)
 
 class RealESRGANResource(Resource):
     @jwt_required()
@@ -156,5 +162,4 @@ class RealESRGANResource(Resource):
 
             return response
 
-        response = setResponse(400, 'Failed to enhance image resolution.')
-        return response
+        return formFieldError(form)
