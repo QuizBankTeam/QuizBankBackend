@@ -1,7 +1,7 @@
 import uuid
 from QuizBankBackend.db import db
 from QuizBankBackend.user.form import *
-from QuizBankBackend.utility import setResponse
+from QuizBankBackend.utility import setResponse, formFieldError
 from QuizBankBackend.user.callback import *
 from flask import request
 from flask_restful import Resource
@@ -23,9 +23,8 @@ class UserProfileResource(Resource):
         if user is None:
             response = setResponse(404, 'User not found.')
             return response
-        else:
-            del user['password']
 
+        del user['password']
         response = setResponse(200, 'Get user successfully.', 'user', user)
         return response
 
@@ -62,8 +61,7 @@ class RegisterResource(Resource):
             response = setResponse(status, msg)
             return response
 
-        response = setResponse(400, 'Failed to register.')
-        return response
+        return formFieldError(form)
 
 class LoginResource(Resource):
     def post(self):
@@ -86,8 +84,7 @@ class LoginResource(Resource):
             set_refresh_cookies(response, create_refresh_token(identity=user['_id']))
             return response
 
-        response = setResponse(400, 'Failed to login.')
-        return response
+        return formFieldError(form)
 
 class LogoutResource(Resource):
     def post(self):
@@ -134,8 +131,7 @@ class ResetPasswordResource(Resource):
             response = setResponse(200, 'Reset password successfully.')
             return response
 
-        response = setResponse(400, 'Failed to reset password.')
-        return response
+        return formFieldError(form)
 
 class ForgotPasswordResource(Resource):
     def post(self):
@@ -154,8 +150,7 @@ class ForgotPasswordResource(Resource):
             response = setResponse(200, 'Forgot password successfully.')
             return response
 
-        response = setResponse(400, 'Failed to forgot password.')
-        return response
+        return formFieldError(form)
 
 class VerifyTokenResource(Resource):
     def get(self, token):
