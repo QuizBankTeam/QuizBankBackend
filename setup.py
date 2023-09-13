@@ -20,7 +20,8 @@ requirements = [
     'basicsr>=1.4.2',
     'opencv-python-headless',
     'opencv-contrib-python-headless',
-    'Flask-Limiter[mongodb]'
+    'Flask-Limiter[mongodb]',
+    'shortuuid'
 ]
 
 setup(

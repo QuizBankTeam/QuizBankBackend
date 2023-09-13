@@ -1,4 +1,4 @@
-import uuid, logging
+import uuid, logging, shortuuid
 from QuizBankBackend.db import db
 from QuizBankBackend.group.form import *
 from QuizBankBackend.utility import setResponse, formFieldError, isBase64
@@ -38,8 +38,16 @@ class GroupResource(Resource):
             formJson['_id'] = str(uuid.uuid4())
             formJson['members'] = []
             formJson['members'].append(formJson['creator'])
+            formJson['inviteCode'] = shortuuid.uuid()
+
+            role = {
+                'userId': formJson['creator'],
+                'entityId': formJson['_id'],
+                'permission': 'owner'
+            }
 
             db.groups.insert_one(formJson)
+            db.roles.insert_one(role)
 
             response = setResponse(
                 201,
