@@ -57,11 +57,11 @@ class QuestionResource(Resource):
             filter = {'_id': formJson['questionId']}
 
             del formJson['questionId']
-            if formJson['createdDate'] is not None:
+            if 'createdDate' in formJson:
                 del formJson['createdDate']
-            if formJson['questionBank'] is not None:
+            if 'questionBank' in formJson:
                 del formJson['questionBank']
-            if formJson['originateFrom'] is not None:
+            if 'originateFrom' in formJson:
                 del formJson['originateFrom']
 
             newQuesiton = {'$set': formJson}
