@@ -2,11 +2,11 @@ import uuid, logging, shortuuid
 from QuizBankBackend.db import db
 from QuizBankBackend.group.form import *
 from QuizBankBackend.utility import (
-        setResponse,
-        formFieldError,
-        isBase64,
-        requestToForm,
-        formToJson
+    setResponse,
+    formFieldError,
+    isBase64,
+    requestToForm,
+    formToJson
 )
 from flask import request
 from flask_restful import Resource

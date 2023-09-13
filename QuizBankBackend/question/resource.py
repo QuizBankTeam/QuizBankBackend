@@ -2,10 +2,10 @@ import uuid, datetime
 from QuizBankBackend.db import db
 from QuizBankBackend.question.form import *
 from QuizBankBackend.utility import(
-        setResponse,
-        formFieldError,
-        requestToForm,
-        formToJson
+    setResponse,
+    formFieldError,
+    requestToForm,
+    formToJson
 )
 from flask import request
 from flask_restful import Resource
