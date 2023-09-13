@@ -1,7 +1,12 @@
 import uuid
 from QuizBankBackend.db import db
 from QuizBankBackend.questionBank.form import *
-from QuizBankBackend.utility import setResponse, formFieldError
+from QuizBankBackend.utility import (
+    setResponse,
+    formFieldError,
+    requestToForm,
+    formToJson
+)
 from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -51,12 +56,13 @@ class QuestionBankResource(Resource):
 
     @jwt_required()
     def post(self):
-        formJson = request.get_json()
-        form = PostQuestionBankForm.from_json(formJson)
+        form = requestToForm(request, PostQuestionBankForm)
+        formJson = formToJson(form)
 
         if form.validate():
             formJson['_id'] = str(uuid.uuid4())
             formJson['creator'] = get_jwt_identity()
+            formJson['createdDate'] = formJson['createdDate'].strftime('%Y-%m-%d')
 
             originateFrom = db.users.find_one({'_id': formJson['originateFrom']})
             members = formJson['members']
@@ -65,11 +71,12 @@ class QuestionBankResource(Resource):
                 response = setResponse(400, 'Original user does not existed.')
                 return response
 
-            for member in members:
-                user = db.users.find_one({'_id': member})
-                if user is None:
-                    response = setResponse(400, 'Member ' + member + ' does not existed.')
-                    return response
+            users = db.users.find({'_id': {'$in': members}})
+
+            missingMembers = set(members) - set(users.distinct('_id'))
+            if len(missingMembers) != 0:
+                response = setResponse(400, f'{missingMembers} does not existed.')
+                return response
 
             db.questionBanks.insert_one(formJson)
 
@@ -85,8 +92,8 @@ class QuestionBankResource(Resource):
 
     @jwt_required()
     def put(self):
-        formJson = request.get_json()
-        form = PutQuestionBankForm.from_json(formJson)
+        form = requestToForm(request, PutQuestionBankForm)
+        formJson = formToJson(form)
 
         if form.validate():
             filter = {'_id': formJson['questionBankId']}
@@ -94,13 +101,17 @@ class QuestionBankResource(Resource):
             del questionBank['questionBankId']
             members = formJson['members']
 
-            for member in members:
-                user = db.users.find_one({'_id': member})
-                if user is None:
-                    response = setResponse(400, 'Member ' + member + ' does not existed.')
-                    return response
+            missingMembers = set(members) - set(users.distinct('_id'))
+            if len(missingMembers) != 0:
+                response = setResponse(400, f'{missingMembers} does not existed.')
+                return response
 
-            db.questionBanks.update_one(filter, {'$set': questionBank})
+            result = db.questionBanks.update_one(filter, {'$set': questionBank})
+
+            if result.modified_count == 0:
+                response = setResponse(404, 'Question bank not found or nothing changed.')
+                return response
+
             questionBank = db.questionBanks.find_one(filter)
             response = setResponse(
                 200,
@@ -125,4 +136,3 @@ class QuestionBankResource(Resource):
 
         response = setResponse(200, 'Delete question bank successfully.')
         return response
-
