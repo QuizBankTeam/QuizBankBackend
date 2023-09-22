@@ -19,21 +19,29 @@ def writeb64(image):
 
 def houghRotate(base64_string):
     img = readb64(base64_string)
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    height, width = img.shape[:2]
+    
+    border_size = 60
+    padded_img = cv2.copyMakeBorder(img, border_size, border_size, border_size, border_size, cv2.BORDER_CONSTANT, value=[255, 255, 255])
+
+    gray = cv2.cvtColor(padded_img, cv2.COLOR_BGR2GRAY)
     thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
-    lines = cv2.HoughLinesP(thresh, 1, np.pi/180, 100, minLineLength=1, maxLineGap=100)#為甚麼用HoughLineP因為它為Hough的優化 第二個參數為rho pi/180為了找出所有的角度
+    lines = cv2.HoughLinesP(thresh, 1, np.pi/180, 100, minLineLength=1, maxLineGap=100)
     slopes = []
 
     for line in lines:
         x1, y1, x2, y2 = line[0]
+        if x2 - x1 == 0:
+            continue
         slope = (y2 - y1) / (x2 - x1)
         slopes.append(slope)
 
     median_slope = np.median(slopes)
     angle = np.arctan(median_slope) * 180 / np.pi
-    height, width = img.shape[:2]
-    center = (width / 2, height / 2)
+
+    center = ((width + 2 * border_size) / 2, (height + 2 * border_size) / 2)
     M = cv2.getRotationMatrix2D(center, angle, 1.0)
-    rotated = cv2.warpAffine(img, M, (width, height), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+    rotated = cv2.warpAffine(padded_img, M, (width + 2 * border_size, height + 2 * border_size), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
 
     return writeb64(rotated)
