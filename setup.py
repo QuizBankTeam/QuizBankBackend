@@ -23,9 +23,8 @@ requirements = [
     'Flask-Limiter[mongodb]',
     'shortuuid',
     'flask-socketio',
-    'gevent',
-    'greenlet',
-    'gevent-websocket',
+    'eventlet',
+    'greenlet'
 ]
 
 setup(
