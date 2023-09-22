@@ -143,10 +143,8 @@ class HoughRotateResource(Resource):
 
 class RealESRGANResource(Resource):
     @jwt_required()
-    # @limiter.limit('1/minute')
+    @limiter.limit('1/minute')
     def post(self):
-        # formJson = request.get_json()
-        # form = RealESRGANForm.from_json(formJson)
         form = RealESRGANForm()
 
         if form.validate():
