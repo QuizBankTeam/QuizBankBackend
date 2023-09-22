@@ -6,19 +6,17 @@ import base64
 import cv2
 import numpy as np
 
-def readb64(base64String):
-    imageString = base64.b64decode(base64String)
-    nparray = np.frombuffer(imageString, np.uint8)
+def readByteImage(imageBytes):
+    nparray = np.frombuffer(imageBytes, np.uint8)
     image = cv2.imdecode(nparray, cv2.IMREAD_COLOR)
     return image
 
-def writeb64(image):
-    base64String = cv2.imencode('.jpg', image)[1].tobytes()
-    base64String = base64.b64encode(base64String).decode('utf-8')
-    return base64String
+def writeByteImage(image):
+    imageBytes = cv2.imencode('.jpg', image)[1].tobytes()
+    return imageBytes
 
-def houghRotate(base64_string):
-    img = readb64(base64_string)
+def houghRotate(imageBytes):
+    img = readByteImage(imageBytes)
 
     height, width = img.shape[:2]
     
@@ -44,4 +42,4 @@ def houghRotate(base64_string):
     M = cv2.getRotationMatrix2D(center, angle, 1.0)
     rotated = cv2.warpAffine(padded_img, M, (width + 2 * border_size, height + 2 * border_size), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
 
-    return writeb64(rotated)
+    return writeByteImage(rotated)

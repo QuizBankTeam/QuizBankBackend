@@ -7,7 +7,7 @@ from QuizBankBackend.scanner.api import *
 from QuizBankBackend.scanner.hough import *
 from QuizBankBackend.scanner.realesrgan import *
 from QuizBankBackend import limiter
-from flask import request
+from flask import request, send_file, Response
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from google.cloud import vision
@@ -124,38 +124,41 @@ class ImgurPhotoResource(Resource):
 class HoughRotateResource(Resource):
     @jwt_required()
     def post(self):
-        formJson = request.get_json()
-        form = HoughRotateForm.from_json(formJson)
+        form = HoughRotateForm()
 
         if form.validate():
+            file = request.files['image']
+            jpegContents = file.read()
             try:
-                b64Image = formJson['image']
-                image = houghRotate(b64Image)
+                image = houghRotate(jpegContents)
             except Exception as e:
                 response = setResponse(400, str(e))
                 return response
 
-            response = setResponse(200, 'Rotate image successfully.', 'image', image)
+            response = Response(image, content_type='image/jpeg')
+
             return response
 
         return formFieldError(form)
 
 class RealESRGANResource(Resource):
     @jwt_required()
-    @limiter.limit('1/minute')
+    # @limiter.limit('1/minute')
     def post(self):
-        formJson = request.get_json()
-        form = RealESRGANForm.from_json(formJson)
+        # formJson = request.get_json()
+        # form = RealESRGANForm.from_json(formJson)
+        form = RealESRGANForm()
 
         if form.validate():
+            file = request.files['image']
+            jpegContents = file.read()
             try:
-                b64Image = formJson['image']
-                image = imageEnhanceWrapper(b64Image)
+                image = imageEnhanceWrapper(jpegContents)
                 if image == 'Image is too big.':
                     response = setResponse(400, image)
                     return response
 
-                response = setResponse(200, 'enhance image resolution successfully.', 'image', image)
+                response = Response(image, content_type='image/jpeg')
             except Exception as e:
                 response = setResponse(400, str(e))
                 return response

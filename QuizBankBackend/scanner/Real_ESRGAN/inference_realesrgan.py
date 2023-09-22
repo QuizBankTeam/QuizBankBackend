@@ -3,11 +3,11 @@ from basicsr.archs.rrdbnet_arch import RRDBNet
 from basicsr.utils.download_util import load_file_from_url
 
 from QuizBankBackend.scanner.Real_ESRGAN.enhancer_config import RealESRGANConfig
-from QuizBankBackend.scanner.hough import writeb64, readb64
+from QuizBankBackend.scanner.hough import readByteImage, writeByteImage
 from QuizBankBackend.scanner.Real_ESRGAN.realesrgan import RealESRGANer
 
 
-def imageEnhance(base64String):
+def imageEnhance(imageBytes):
     args = RealESRGANConfig()
 
     # determine models according to model names
@@ -48,7 +48,8 @@ def imageEnhance(base64String):
         half=not args.fp32,
         gpu_id=args.gpu_id)
 
-    img = readb64(base64String)
+    # img = readb64(base64String)
+    img = readByteImage(imageBytes)
     height = img.shape[0]
     width = img.shape[1]
     if height * width == 810000:
@@ -56,7 +57,7 @@ def imageEnhance(base64String):
 
     try:
         output, _ = upsampler.enhance(img, outscale=args.outscale)
-        result = writeb64(output)
+        result = writeByteImage(output)
         return result
     except RuntimeError as error:
         print('Error', error)
