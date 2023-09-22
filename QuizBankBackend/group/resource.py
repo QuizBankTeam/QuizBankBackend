@@ -1,7 +1,13 @@
 import uuid, logging, shortuuid
 from QuizBankBackend.db import db
 from QuizBankBackend.group.form import *
-from QuizBankBackend.utility import setResponse, formFieldError, isBase64
+from QuizBankBackend.utility import (
+    setResponse,
+    formFieldError,
+    isBase64,
+    requestToForm,
+    formToJson
+)
 from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -25,8 +31,8 @@ class GroupResource(Resource):
 
     @jwt_required()
     def post(self):
-        formJson = request.get_json()
-        form = PostGroupForm.from_json(formJson)
+        form = requestToForm(request, PostGroupForm)
+        formJson = formToJson(form)
 
         if form.validate():
 
@@ -61,11 +67,10 @@ class GroupResource(Resource):
 
     @jwt_required()
     def put(self):
-        formJson = request.get_json()
-        form = PutGroupForm.from_json(formJson)
+        form = requestToForm(request, PutGroupForm)
+        formJson = formToJson(form)
 
         if form.validate():
-
 
             if isBase64(formJson['avatar']) is False and formJson['avatar'] is not None and formJson['avatar'] != "":
                 response = setResponse(400, 'Avatar is not base64.')
@@ -73,13 +78,14 @@ class GroupResource(Resource):
 
             formJson['_id'] = formJson['groupId']
             del formJson['groupId']
+
             result = db.groups.update_one(
                 {'_id': formJson['_id']},
                 {'$set': formJson}
             )
 
             if result.modified_count == 0:
-                response = setResponse(404, 'Group does not existed.')
+                response = setResponse(404, 'Group does not existed or nothing changed.')
                 return response
 
             response = setResponse(

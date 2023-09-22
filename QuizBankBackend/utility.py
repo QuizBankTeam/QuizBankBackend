@@ -31,3 +31,13 @@ def isBase64(s):
         return base64.b64encode(base64.b64decode(s)) == s
     except Exception:
         return False
+
+def requestToForm(request, form):
+    formJson = request.get_json()
+    form = form.from_json(formJson)
+    return form
+
+def formToJson(form):
+    formJson = form.data
+    del formJson['csrf_token']
+    return formJson

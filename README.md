@@ -31,13 +31,14 @@ source quizbank/bin/activate
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 pip install -e . -U
 ```
-**Run**
+**Run**<br>
+1. new
+```
+python3 main.py
+```
+2. old(without socketio)
 ```
 flask --app QuizBankBackend run --debug --host=0.0.0.0
-```
-or run `run.sh` in **linux**
-```
-./run.sh
 ```
 or run in Docker container
 ```

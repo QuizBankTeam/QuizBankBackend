@@ -21,7 +21,11 @@ requirements = [
     'opencv-python-headless',
     'opencv-contrib-python-headless',
     'Flask-Limiter[mongodb]',
-    'shortuuid'
+    'shortuuid',
+    'flask-socketio',
+    'gevent',
+    'greenlet',
+    'gevent-websocket',
 ]
 
 setup(
