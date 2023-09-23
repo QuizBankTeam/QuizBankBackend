@@ -35,9 +35,9 @@ def create_app():
     os.environ['GCLOUD_PROJECT'] = config['GCPProjectId']
 
     app.config.from_pyfile('config.py')
-    gunicorn_logger = logging.getLogger('gunicorn.error')
-    app.logger.handlers = gunicorn_logger.handlers
-    app.logger.setLevel(gunicorn_logger.level)
+    # gunicorn_logger = logging.getLogger('gunicorn.error')
+    # app.logger.handlers = gunicorn_logger.handlers
+    # app.logger.setLevel(gunicorn_logger.level)
 
     mail = Mail(app)
     csrf = CSRFProtect(app)
