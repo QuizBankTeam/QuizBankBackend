@@ -153,12 +153,12 @@ class RealESRGANResource(Resource):
             try:
                 image = imageEnhanceWrapper(jpegContents)
                 if image == 'Image is too big.':
-                    response = setResponse(400, image)
+                    response = setResponse(413, image)
                     return response
 
                 response = Response(image, content_type='image/jpeg')
             except Exception as e:
-                response = setResponse(400, str(e))
+                response = setResponse(406, str(e))
                 return response
 
             return response

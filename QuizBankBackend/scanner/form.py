@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField
-from wtforms.validators import DataRequired
+from wtforms import StringField, FileField
+from wtforms.validators import DataRequired, Regexp
 
 
 class OCRForm(FlaskForm):
@@ -18,8 +18,13 @@ class DocumentOCRForm(FlaskForm):
 class PostImgurPhotoForm(OCRForm):
     pass
 
-class HoughRotateForm(OCRForm):
-    pass
+class HoughRotateForm(FlaskForm):
+    image = FileField(
+        'image',
+        validators=[
+            DataRequired(),
+        ]
+    )
 
-class RealESRGANForm(OCRForm):
+class RealESRGANForm(HoughRotateForm):
     pass
