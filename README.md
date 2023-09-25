@@ -1,7 +1,7 @@
 # QuizBankBackend
 **Environment**<br>
 Platform: Ubuntu 22.04 LTS<br>
-Python version: 3.10.6<br>
+Python version: 3.10.12<br>
 
 **Configuration**<br>
 You need to add those settings in `QuizBankBackend/setting.json`
@@ -32,17 +32,12 @@ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.o
 pip install -e . -U
 ```
 **Run**<br>
-1. new
 ```
 python3 main.py
 ```
-2. old(without socketio)
-```
-flask --app QuizBankBackend run --debug --host=0.0.0.0
-```
 or run in Docker container
 ```
-docker run -p 5000:5000 --name quizbank -v ~/.config/gcloud:/root/.config/gcloud -d youwaiting/quizbank:NO_WSGI
+docker run -p 5000:5000 --name quizbank -v ~/.config/gcloud:/root/.config/gcloud -d youwaiting/quizbank:no_wsgi
 ```
 ## API Description
 [API Document](https://hackmd.io/@5ljei2jDT1KwLOo0tzos2w/Sk4YwJqw3)
