@@ -41,8 +41,8 @@ class QuestionSetResource(Resource):
             formJson['provider'] = get_jwt_identity()
 
             for question in formJson['questions']:
-                bank = db.questionBanks.find_one({'_id': formJson['questionBank']})
-                originateFrom = db.users.find_one({'_id': formJson['originateFrom']})
+                bank = db.questionBanks.find_one({'_id': question['questionBank']})
+                originateFrom = db.users.find_one({'_id': question['originateFrom']})
 
                 if bank is None:
                     response = setResponse(400, 'Question bank of quesiton does not existed.')
@@ -92,3 +92,29 @@ class QuestionSetResource(Resource):
 
         response = setResponse(200, 'Delete question set successfully.')
         return response
+
+class MoveQuestionSetResource(Resource):
+    @jwt_required()
+    def patch(self):
+        formJson = request.get_json()
+        form = MoveQuestionSetForm.from_json(formJson)
+
+        if form.validate():
+            filter = {'_id': formJson['questionSetId']}
+            result = db.questionSets.update_many(
+                filter,
+                {'$set': {
+                        'questionBank': formJson['newBankId'],
+                        'questions.$[].questionBank': formJson['newBankId']
+                    }
+                }
+            )
+
+            if result.modified_count == 0:
+                response = setResponse(404, 'Question set does not existed or nothing changed.')
+                return response
+            
+            response = setResponse(200, 'Move question set successfully.')
+            return response
+
+        return formFieldError(form)

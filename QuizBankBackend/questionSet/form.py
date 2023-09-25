@@ -48,3 +48,20 @@ class PutQuestionSetForm(FlaskForm):
         validators=[DataRequired()]
     ))
     questions = FieldList(FormField(PostQuestionForm))
+
+
+class MoveQuestionSetForm(FlaskForm):
+    questionSetId = StringField(
+        label='questionSetId',
+        validators=[
+            DataRequired(),
+            UUID()
+        ]
+    )
+    newBankId = StringField(
+        label='newBankId',
+        validators=[
+            DataRequired(),
+            UUID()
+        ]
+    )
