@@ -204,3 +204,26 @@ class TagResource(Resource):
             return response
 
         return formFieldError(form)
+
+class MoveQuestionResource(Resource):
+    @jwt_required()
+    def patch(self):
+        form = requestToForm(request, MoveQuestionForm)
+        formJson = formToJson(form)
+
+        if form.validate():
+            questionId = formJson['questionId']
+
+            result = db.questions.update_one(
+                {'_id': questionId},
+                {'$set': {'questionBank': formJson['newBankId']}}
+            )
+
+            if result.modified_count == 0:
+                response = setResponse(404, 'Question does not existed or nothing changed.')
+                return response
+            
+            response = setResponse(200, 'Move question successfully.')
+            return response
+
+        return formFieldError(form)

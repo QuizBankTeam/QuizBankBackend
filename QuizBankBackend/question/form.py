@@ -152,3 +152,19 @@ class PatchTagForm(FlaskForm):
     tag = FieldList(StringField(
         validators=[DataRequired()]
     ))
+
+class MoveQuestionForm(FlaskForm):
+    questionId = StringField(
+        label='questionId',
+        validators=[
+            DataRequired(),
+            UUID()
+        ]
+    )
+    newBankId = StringField(
+        label='newBankId',
+        validators=[
+            DataRequired(),
+            UUID()
+        ]
+    )
