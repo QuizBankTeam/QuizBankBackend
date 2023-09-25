@@ -26,5 +26,10 @@ class HoughRotateForm(FlaskForm):
         ]
     )
 
-class RealESRGANForm(HoughRotateForm):
-    pass
+class RealESRGANForm(FlaskForm):
+    image = FileField(
+        'image',
+        validators=[
+            DataRequired(),
+        ]
+    )
