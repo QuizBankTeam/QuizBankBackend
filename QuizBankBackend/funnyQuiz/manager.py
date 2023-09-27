@@ -17,10 +17,10 @@ class FunnQuizManager:
                     'received': 0,
                 },
                 'count': 0,
-                'answer': {},
+                'answers': {},
             }
-            for question in quiz['question']:
-                self.rooms[room_id]['answers'][question['_id']] = question['answer']
+            for question in quiz['questions']:
+                self.rooms[room_id]['answers'][question['_id']] = question['answerOptions']
     
     def get_all_users(self, quizId):
         return list(self.rooms[quizId]['members'])
@@ -30,8 +30,9 @@ class FunnQuizManager:
             self.__create_quiz(room_id)
 
         self.rooms[room_id]['members'].add(user_id)
-        self.rooms[room_id]['userState'][user_id]['score'] = 0
-        self.rooms[room_id]['userState'][user_id]['record'] = {}
+        self.rooms[room_id]['userStates'][user_id] = {}
+        self.rooms[room_id]['userStates'][user_id]['score'] = 0
+        self.rooms[room_id]['userStates'][user_id]['record'] = {}
         join_room(room_id)
 
     def start_quiz(self, quizId, questionId, questionCount):

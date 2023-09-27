@@ -7,7 +7,7 @@ from QuizBankBackend.scanner.api import *
 from QuizBankBackend.scanner.hough import *
 from QuizBankBackend.scanner.realesrgan import *
 from QuizBankBackend import limiter
-from flask import request, send_file, Response
+from flask import request, Response
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from google.cloud import vision
@@ -129,6 +129,7 @@ class HoughRotateResource(Resource):
         if form.validate():
             file = request.files['image']
             jpegContents = file.read()
+            file.close()
             try:
                 image = houghRotate(jpegContents)
             except Exception as e:
@@ -150,6 +151,7 @@ class RealESRGANResource(Resource):
         if form.validate():
             file = request.files['image']
             jpegContents = file.read()
+            file.close()
             try:
                 image = imageEnhanceWrapper(jpegContents)
                 if image == 'Image is too big.':
