@@ -44,7 +44,11 @@ class GroupResource(Resource):
             formJson['_id'] = str(uuid.uuid4())
             formJson['members'] = []
             formJson['members'].append(formJson['creator'])
+            formJson['createdDate'] = formJson['createdDate'].strftime('%Y-%m-%d')
             formJson['inviteCode'] = shortuuid.uuid()
+            formJson['chatroom']['_id'] = str(uuid.uuid4())
+            formJson['chatroom']['messages'] = []
+            formJson['chatroom']['createdDate'] = formJson['chatroom']['createdDate'].strftime('%Y-%m-%d')
 
             role = {
                 'userId': formJson['creator'],
