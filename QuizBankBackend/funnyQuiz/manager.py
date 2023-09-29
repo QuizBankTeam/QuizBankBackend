@@ -32,7 +32,7 @@ class FunnQuizManager:
         self.rooms[room_id]['members'].add(user_id)
         self.rooms[room_id]['userStates'][user_id] = {}
         self.rooms[room_id]['userStates'][user_id]['score'] = 0
-        self.rooms[room_id]['userStates'][user_id]['record'] = {}
+        self.rooms[room_id]['userStates'][user_id]['records'] = {}
         join_room(room_id)
 
     def start_quiz(self, quizId, questionId, questionCount):
@@ -56,7 +56,7 @@ class FunnQuizManager:
             users[userId]['records'][questionId] = userAnswer
             users[userId]['score'] += score
 
-            if question['received'] == len(self.rooms[quizId]['users']):
+            if question['received'] == len(self.rooms[quizId]['members']):
                 question['current_id'] = nextQuestionId
                 question['received'] = 0
                 question['current_index'] += 1
