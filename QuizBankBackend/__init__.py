@@ -44,7 +44,7 @@ def create_app():
     jwt = JWTManager(app)
     api = Api(app)
     wtforms_json.init()
-    socketio = SocketIO(app, logger=True, engineio_logger=True)
+    socketio = SocketIO(app, logger=True, engineio_logger=True, cors_allowed_origins='*')
 
 
     class CSRFToken(Resource):

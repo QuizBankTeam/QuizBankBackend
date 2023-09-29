@@ -24,7 +24,7 @@ requirements = [
     'shortuuid',
     'flask-socketio',
     'eventlet',
-    'greenlet'
+    'simple-websocket',
 ]
 
 setup(
