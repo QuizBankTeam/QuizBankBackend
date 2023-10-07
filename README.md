@@ -44,3 +44,4 @@ docker run -p 5000:5000 --name quizbank -v ~/.config/gcloud:/root/.config/gcloud
 
 ## Reference
 [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)
+[Latex OCR](https://github.com/lukas-blecher/LaTeX-OCR)
