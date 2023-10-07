@@ -33,3 +33,11 @@ class RealESRGANForm(FlaskForm):
             DataRequired(),
         ]
     )
+
+class LatexOCRForm(FlaskForm):
+    image = FileField(
+        'image',
+        validators=[
+            DataRequired(),
+        ]
+    )

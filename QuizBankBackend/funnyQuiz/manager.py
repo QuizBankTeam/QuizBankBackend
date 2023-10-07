@@ -44,7 +44,7 @@ class FunnQuizManager:
 
     def finish_quiz(self, room_id):
         if room_id in self.rooms:
-            if self.rooms[room_id]['count'] == self.rooms['question']['current_index']:
+            if self.rooms[room_id]['count'] == self.rooms[room_id]['question']['current_index']:
                 close_room(room_id)
                 del self.rooms[room_id]
 

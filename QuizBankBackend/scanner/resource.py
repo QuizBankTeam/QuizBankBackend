@@ -6,6 +6,7 @@ from QuizBankBackend.utility import setResponse, formFieldError
 from QuizBankBackend.scanner.api import *
 from QuizBankBackend.scanner.hough import *
 from QuizBankBackend.scanner.realesrgan import *
+from QuizBankBackend.scanner.latexocr import imageToLatex
 from QuizBankBackend import limiter
 from flask import request, Response
 from flask_restful import Resource
@@ -163,6 +164,26 @@ class RealESRGANResource(Resource):
                 response = setResponse(406, str(e))
                 return response
 
+            return response
+
+        return formFieldError(form)
+    
+class LatexOCRResource(Resource):
+    @jwt_required()
+    def post(self):
+        form = LatexOCRForm()
+
+        if form.validate():
+            file = request.files['image']
+            jpegContents = file.read()
+            file.close()
+            try:
+                latex = imageToLatex(jpegContents)
+            except Exception as e:
+                response = setResponse(406, str(e))
+                return response
+
+            response = setResponse(200, 'Convert image to latex successfully.', 'latex', latex)
             return response
 
         return formFieldError(form)

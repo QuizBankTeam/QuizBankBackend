@@ -1,5 +1,3 @@
-import os
-import json
 from QuizBankBackend import config
 from datetime import timedelta
 
