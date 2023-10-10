@@ -1,4 +1,5 @@
-from flask_socketio import Namespace, emit, close_room
+from flask_socketio import Namespace, emit
+from flask import request
 from QuizBankBackend.funnyQuiz.manager import FunnQuizManager
 
 
@@ -9,6 +10,7 @@ class FunnyQuizNamespace(Namespace):
         emit('connected')
 
     def on_disconnect(self):
+        funnyQuizManager.leave_room()
         emit('disconnected')
 
     def on_join_quiz(self, quizId, userId):
@@ -25,18 +27,17 @@ class FunnyQuizNamespace(Namespace):
         funnyQuizManager.start_quiz(quizId, questionId, questionCount)
         emit('startQuiz', to=quizId)
     
-    def on_timeout(self, quizId, userId, nextQuestionId):
-        funnyQuizManager.finish_question(quizId=quizId, userId=userId, nextQuestionId=nextQuestionId)
+    def on_timeout(self, quizId, userId, qtype, nextQuestionId):
+        funnyQuizManager.finish_question(quizId=quizId, userId=userId, qtype=qtype, nextQuestionId=nextQuestionId)
         emit('timeout', userId, to=quizId)
 
-    def on_finish_question(self, quizId, userId, userAnswer, socre, nextQuestionId):
-        isNext = funnyQuizManager.finish_question(quizId, userId, userAnswer, socre, nextQuestionId)
+    def on_finish_question(self, quizId, userId, qtype, userAnswer, socre, nextQuestionId):
+        isNext = funnyQuizManager.finish_question(quizId, userId, qtype, userAnswer, socre, nextQuestionId)
         emit('finishQuestion', isNext, to=quizId)
 
     def on_finish_quiz(self, quizId):
-        funnyQuizManager.finish_quiz(quizId)
         emit('finishQuiz', to=quizId)
-        close_room(quizId)
+        funnyQuizManager.finish_quiz(quizId)
 
     def on_return_quiz_state(self, quizId):
         quizState = funnyQuizManager.get_quiz_state(quizId)
@@ -49,3 +50,7 @@ class FunnyQuizNamespace(Namespace):
     def on_complete_ability(self, quizId, index):
         victim = funnyQuizManager.complete_ability(index)
         emit('completeAbility', victim, to=quizId)
+
+    def on_show_quizs(self, quizId):
+        quizs = funnyQuizManager.get_all_quizs()
+        emit('showQuizs', quizs)

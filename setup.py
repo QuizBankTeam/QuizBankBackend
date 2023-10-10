@@ -24,7 +24,8 @@ requirements = [
     'shortuuid',
     'flask-socketio',
     'eventlet',
-    'pix2tex'
+    'pix2tex',
+    'colorama'
 ]
 
 setup(
