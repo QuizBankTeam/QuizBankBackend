@@ -9,16 +9,20 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 class AllQuizResource(Resource):
     @jwt_required()
     def get(self):
-        quizType = request.args.get('quizType')
         userId = get_jwt_identity()
-        quizFilter = {'type': quizType, 'members': {"$in" : [userId]} }
-        quiz = list(db.quizs.find(quizFilter))
         try:
             batch = int(request.args.get('batch'))
-        except ValueError:
-            response = setResponse(400, 'Failed to get all quizRecord.')
+            quizType = request.args.get('quizType')
+            if quizType is None:
+                response = setResponse(400, "quizType is None")
+                return response
+        except Exception as e:
+            response = setResponse(400, str(e))
             return response
         
+
+        quizFilter = {'type': quizType, 'members': {"$in" : [userId]} }
+        quiz = list(db.quizs.find(quizFilter))
         
         if quiz is None:
             response = setResponse(
@@ -26,6 +30,7 @@ class AllQuizResource(Resource):
             return response
         if len(quiz)>30:
             quiz = quiz[batch*30: (batch+1)*30]
+
 
         response = setResponse(
             200,

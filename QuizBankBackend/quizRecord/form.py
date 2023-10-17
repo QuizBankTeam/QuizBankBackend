@@ -70,13 +70,6 @@ class CopyQuestionForm(FlaskForm):
     ))
 
 class PostQuestionRecordForm(FlaskForm):
-    user = StringField(
-        label='user',
-        validators=[
-            DataRequired(),
-            UUID()
-        ]
-    )
     userAnswerOptions = FieldList(
         StringField(
             label='userAnswerOptions',
@@ -91,10 +84,6 @@ class PostQuestionRecordForm(FlaskForm):
         validators=[DataRequired()],
         false_values={}
     )
-    date = DateField(
-        label='date',
-        validators=[DataRequired()]
-    )
     question = FormField(CopyQuestionForm)
 
 class PostQuizRecordForm(FlaskForm):
@@ -104,6 +93,13 @@ class PostQuizRecordForm(FlaskForm):
     )
     quizId = StringField(
         label='quizId',
+        validators=[
+            DataRequired(),
+            UUID()
+        ]
+    )
+    user = StringField(
+        label='user',
         validators=[
             DataRequired(),
             UUID()
@@ -142,15 +138,7 @@ class PostQuizRecordForm(FlaskForm):
         FormField(PostQuestionRecordForm),
         min_entries=1
     )
-    
-# class DeleteQuizRecordForm(FlaskForm):
-#     quizRecordId = StringField(
-#         label='quizRecordId',
-#         validators=[
-#             DataRequired(),
-#             UUID()
-#         ]
-#     )
+
 
    
     

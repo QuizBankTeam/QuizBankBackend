@@ -11,10 +11,16 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 class AllQuizRecordResource(Resource):
     @jwt_required()
     def get(self):
-        quizRecordType = request.args.get('quizRecordType')
+        try:
+            quizRecordType = request.args.get('quizRecordType')
+        except Exception as e:
+            response = setResponse(400, 'Failed to get all quizRecord.')
+            return response
+        
+        
         if quizRecordType in QUIZ_RECORD_TYPE:
             userId = get_jwt_identity()
-            recordFilter = {'type': quizRecordType, 'members': {"$in" : [userId]}}
+            recordFilter = {'type': quizRecordType, 'user': userId }
             quizRecords = list(db.quizRecords.find(recordFilter))
 
             if quizRecords is None:
@@ -70,7 +76,6 @@ class QuizRecordResource(Resource):
             formJson['_id'] = quizRecordId
             
             for questionRecord in formJson['questionRecords']:
-                questionRecord['quizRecord'] = quizRecordId
                 questionRecord['_id'] = str(uuid.uuid4())
                 questionRecord['question']['_id'] = str(uuid.uuid4())
                 questionRecordIDs.append(questionRecord['_id'])
