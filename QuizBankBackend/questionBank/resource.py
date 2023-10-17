@@ -100,6 +100,7 @@ class QuestionBankResource(Resource):
             questionBank = formJson.copy()
             del questionBank['questionBankId']
             members = formJson['members']
+            users = db.users.find({'_id': {'$in': members}})
 
             missingMembers = set(members) - set(users.distinct('_id'))
             if len(missingMembers) != 0:
