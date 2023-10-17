@@ -56,3 +56,20 @@ class ForgotPasswordForm(FlaskForm):
             Email()
         ]
     )
+
+class ChangePasswordForm(FlaskForm):
+    email = EmailField(
+        label='email',
+        validators=[
+            DataRequired(),
+            Email()
+        ]
+    )
+    newPassword = PasswordField(
+        label='newPassword',
+        validators=[DataRequired()]
+    )
+    confirmPassword = PasswordField(
+        label='confirmPassword',
+        validators=[DataRequired()]
+    )

@@ -1,9 +1,9 @@
 import uuid
 from QuizBankBackend.db import db
 from QuizBankBackend.user.form import *
-from QuizBankBackend.utility import setResponse, formFieldError
+from QuizBankBackend.utility import setResponse, formFieldError, requestToForm, formToJson
 from QuizBankBackend.user.callback import *
-from flask import request
+from flask import request, render_template, make_response
 from flask_restful import Resource
 from flask_jwt_extended import (
     create_access_token,
@@ -31,10 +31,12 @@ class UserProfileResource(Resource):
 
 class RegisterResource(Resource):
     def post(self):
-        formJson = request.get_json()
-        form = RegisterForm.from_json(formJson)
+        form = requestToForm(request, RegisterForm)
+        formJson = formToJson(form)
 
         if form.validate():
+
+            formJson['createdDate'] = formJson['createdDate'].strftime('%Y-%m-%d')
             status = 201
             msg = 'Register successfully.'
             if db.users.find_one({'username': formJson['username']}):
@@ -65,8 +67,8 @@ class RegisterResource(Resource):
 
 class LoginResource(Resource):
     def post(self):
-        formJson = request.get_json()
-        form = LoginForm.from_json(formJson)
+        form = requestToForm(request, LoginForm)
+        formJson = formToJson(form)
 
         if form.validate():
             user = db.users.find_one({'username': formJson['username']})
@@ -103,8 +105,8 @@ class RefreshTokenResource(Resource):
 class ResetPasswordResource(Resource):
     @jwt_required()
     def patch(self):
-        formJson = request.get_json()
-        form = ResetPasswordForm.from_json(formJson)
+        form = requestToForm(request, ResetPasswordForm)
+        formJson = formToJson(form)
 
         if form.validate():
             userId = get_jwt_identity()
@@ -135,8 +137,8 @@ class ResetPasswordResource(Resource):
 
 class ForgotPasswordResource(Resource):
     def post(self):
-        formJson = request.get_json()
-        form = ForgotPasswordForm.from_json(formJson)
+        form = requestToForm(request, ForgotPasswordForm)
+        formJson = formToJson(form)
 
         if form.validate():
             user = db.users.find_one({'email': formJson['email']})
@@ -159,5 +161,29 @@ class VerifyTokenResource(Resource):
             response = setResponse(401, 'Invalid token. Please try again.')
             return response
 
-        response = setResponse(200, 'Reset token successfully.')
-        return response
+        resp = make_response(render_template('forgotPassword.html'), 200)
+        return resp
+
+class ChangePasswordResource(Resource):
+    def patch(self):
+        form = requestToForm(request, ChangePasswordForm)
+        formJson = formToJson(form)
+
+        if form.validate():
+            if formJson['newPassword'] != formJson['confirmPassword']:
+                response = setResponse(409, 'Confirm password is not the same as the new one.')
+                return response
+
+            result = db.users.update_one(
+                {'email': formJson['email']},
+                {'$set': {'password': formJson['newPassword']}}
+            )
+
+            if result.modified_count == 0:
+                response = setResponse(500, 'Change password failed.')
+                return response
+
+            response = setResponse(200, 'Change password successfully.')
+            return response
+
+        return formFieldError(form)

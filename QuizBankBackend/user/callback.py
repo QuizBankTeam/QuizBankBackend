@@ -13,7 +13,7 @@ from flask_jwt_extended import (
 )
 from flask import url_for
 from flask_mail import Message
-from itsdangerous import TimedSerializer as Serializer
+from itsdangerous import TimedSerializer 
 
 
 @app.after_request
@@ -31,16 +31,17 @@ def refreshExpireJWTs(response):
         return response
 
 def getUserJWSToken(user: dict):
-    serializer = Serializer(app.config['SECRET_KEY'])
+    serializer = TimedSerializer(app.config['SECRET_KEY'])
     # print(type(serializer.dumps({'userId': user['_id']})))
     return serializer.dumps({'userId': user['_id']})
 
 def verifyUserJWSToken(token: str):
-    serializer = Serializer(app.config['SECRET_KEY'])
+    serializer = TimedSerializer(app.config['SECRET_KEY'])
     try:
         userId = serializer.loads(token, max_age=300)['userId']
     except Exception as err:
-        return err
+        print(err)
+        return None
     return db.users.find_one({'_id': userId})
 
 def sendEmail(user: dict):
