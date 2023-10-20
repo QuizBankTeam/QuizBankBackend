@@ -15,10 +15,10 @@ class FunnyQuizNamespace(Namespace):
 
     def on_join_quiz(self, quizId, userId):
         print(userId + ' join quiz in ' + quizId)
-        flag, username = funnyQuizManager.join_room(quizId, userId)
-        userCount = len(funnyQuizManager.get_all_users(quizId))
+        flag, users = funnyQuizManager.join_room(quizId, userId)
         if flag:
-            emit('joinQuiz', (userCount, username), to=quizId)
+            userCount = len(funnyQuizManager.get_all_users(quizId))
+            emit('joinQuiz', (userCount, users), to=quizId)
         else:
             emit('quizNotFound')
 
@@ -43,14 +43,14 @@ class FunnyQuizNamespace(Namespace):
         quizState = funnyQuizManager.get_quiz_state(quizId)
         emit('returnQuizState', quizState, to=quizId)
 
-    def on_use_ability(self, quizId, attacker, receiver, type):
-        abilityIndex = funnyQuizManager.use_ability(quizId, attacker, receiver, type)
-        emit('useAbility', (receiver, abilityIndex, type), to=quizId)
+    def on_use_ability(self, quizId, attacker, receiver, atype):
+        # abilityIndex = funnyQuizManager.use_ability(quizId, attacker, receiver, type)
+        emit('useAbility', (receiver, attacker, atype), to=quizId)
 
-    def on_complete_ability(self, quizId, index):
-        victim = funnyQuizManager.complete_ability(index)
-        emit('completeAbility', victim, to=quizId)
+    # def on_complete_ability(self, quizId, index):
+    #     victim = funnyQuizManager.complete_ability(index)
+    #     emit('completeAbility', victim, to=quizId)
 
-    def on_show_quizs(self, quizId):
-        quizs = funnyQuizManager.get_all_quizs()
-        emit('showQuizs', quizs)
+    # def on_show_quizs(self, quizId):
+    #     quizs = funnyQuizManager.get_all_quizs()
+    #     emit('showQuizs', quizs)

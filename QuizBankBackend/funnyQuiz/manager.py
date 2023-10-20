@@ -5,40 +5,40 @@ from QuizBankBackend.db import db
 from QuizBankBackend.constant import *
 
 
-class AbilityManager:
-    def __init__(self):
-        self.type = ['stall']
-        self.processes = []
+# class AbilityManager:
+#     def __init__(self):
+#         self.type = ['stall']
+#         self.processes = []
 
-    def complete_ability(self, index):
-        victim = self.processes[index]['receiver']
-        del self.processes[index]
-        return victim
+#     def complete_ability(self, index):
+#         victim = self.processes[index]['receiver']
+#         del self.processes[index]
+#         return victim
 
-    def use_ability(self, quiz, attacker, receiver, type):
-        ability = {}
-        if type == 0:
-            ability = {
-                'type': self.type[type],
-                'quiz': quiz,
-                'attacker': attacker,
-                'receiver': receiver,
-            }
+#     def use_ability(self, quiz, attacker, receiver, type):
+#         ability = {}
+#         if type == 0:
+#             ability = {
+#                 'type': self.type[type],
+#                 'quiz': quiz,
+#                 'attacker': attacker,
+#                 'receiver': receiver,
+#             }
 
-        self.processes.append(ability)
-        return len(self.processes)
+#         self.processes.append(ability)
+#         return len(self.processes)
 
-    def check_user_state(self, quiz_id, user_id):
-        user = [x for x in self.processes if self.processes['receiver'] == user_id and self.processes['quiz'] == quiz_id]
+#     def check_user_state(self, quiz_id, user_id):
+#         user = [x for x in self.processes if self.processes['receiver'] == user_id and self.processes['quiz'] == quiz_id]
 
-        return user
+#         return user
 
 
 class FunnQuizManager:
     def __init__(self):
         self.socketPool = {}
         self.rooms = {}
-        self.abilityManager = AbilityManager()
+        # self.abilityManager = AbilityManager()
 
     def __create_quiz(self, room_id):
         if room_id not in self.rooms:
@@ -63,6 +63,8 @@ class FunnQuizManager:
             return True
     
     def get_all_users(self, quizId):
+        # print(Fore.RED + user_id + ' join quiz in ' + room_id + Style.RESET_ALL)
+        # print(Fore.RED + self.rooms + Style.RESET_ALL)
         return list(self.rooms[quizId]['userStates'].keys())
 
     def get_all_quizs(self):
@@ -85,10 +87,12 @@ class FunnQuizManager:
             'user_id': user_id,
         }
 
-        users = db.users.find({'_id': { '$in': list(self.rooms[room_id]['userStates'].keys())}})
-        usernames = [user['username'] for user in users]
+        usersRaw = db.users.find({'_id': { '$in': list(self.rooms[room_id]['userStates'].keys())}})
+        users = {}
+        for user in usersRaw:
+            users[user['_id']] = user['username']
         join_room(room_id)
-        return (flag, usernames)
+        return (flag, users)
         
     def leave_room(self):
         sid = request.sid
@@ -149,11 +153,11 @@ class FunnQuizManager:
             return self.rooms[room_id]
         return None
     
-    def use_ability(self, quiz, attacker, receiver, type):
-        index = self.abilityManager.use_ability(quiz, attacker, receiver, type)
-        if type != 0:
-            return -1
-        return index
+    # def use_ability(self, quiz, attacker, receiver, type):
+    #     index = self.abilityManager.use_ability(quiz, attacker, receiver, type)
+    #     if type != 0:
+    #         return -1
+    #     return index
 
-    def complete_ability(self, index):
-        return self.abilityManager.complete_ability(index)
+    # def complete_ability(self, index):
+    #     return self.abilityManager.complete_ability(index)
