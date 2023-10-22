@@ -43,5 +43,6 @@ docker run -p 5000:5000 --name quizbank -v ~/.config/gcloud:/root/.config/gcloud
 [API Document](https://hackmd.io/@5ljei2jDT1KwLOo0tzos2w/Sk4YwJqw3)
 
 ## Reference
-[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)
-[Latex OCR](https://github.com/lukas-blecher/LaTeX-OCR)
+[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)<br>
+[Latex OCR](https://github.com/lukas-blecher/LaTeX-OCR)<br>
+[Hough Rotate](https://bit.kuas.edu.tw/~jni/2021/vol6/s2/07-v6n2-0115_r02.pdf)
